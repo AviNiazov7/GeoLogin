@@ -21,44 +21,31 @@ Geo Search App is a **location-based search platform** that allows users to find
 │── README.md              # Main project documentation
 
 Technologies Used
-	•	Backend: Python, Flask, MongoDB, JWT Authentication, Google Places API
-	•	Frontend: React, Axios, CSS/Tailwind
+• Backend: Python, Flask, MongoDB, JWT Authentication, Google Places API
+• Frontend: React, Axios, CSS/Tailwind
 
 Installation & Setup
 
 Backend
-	1.	Navigate to the backend folder:
-
+1. Navigate to the backend folder:
 cd backend
 
-
-	2.	Install dependencies:
-
+2. Install dependencies:
 pip install -r requirements.txt
 
-
-	3.	Run the Flask application:
-
+3. Run the Flask application:
 python run.py
 
 
-
 Frontend
-	1.	Navigate to the frontend folder:
-
+1. Navigate to the frontend folder:
 cd frontend
 
-
-	2.	Install dependencies:
-
+2. Install dependencies:
 npm install
 
-
-	3.	Start the frontend development server:
-
+3. Start the frontend development server:
 npm start
-
-
 
 Environment Variables
 
@@ -70,5 +57,4 @@ SECRET_KEY=your_secret_key
 GOOGLE_API_KEY=your_google_places_api_key
 
 Deployment
-
 For production, ensure you set the correct environment variables and configure WSGI for Flask. The frontend can be deployed on Vercel, Netlify, or any static hosting service.
