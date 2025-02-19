@@ -19,16 +19,10 @@ This is the backend service for the **Geo Search App**, built using **Flask** an
 │   ├── searches_controller.py # Manages user search history
 │   ├── __init__.py            # Initializes the controllers module
 │
-│── /models             # Database schemas (MongoDB)
-│   ├── user_model.py   # Defines user structure in MongoDB
-│   ├── place_model.py  # Defines place structure in MongoDB
-│   ├── search_model.py # Defines search history structure in MongoDB
-│   ├── __init__.py     # Initializes the models module
-│
-│── /services           # Business logic and external API integrations
-│   ├── google_places_service.py # Interacts with Google Places API
-│   ├── auth_service.py          # Manages authentication logic
-│   ├── __init__.py               # Initializes the services module
+│── /database           # Database connection and setup
+│   ├── db_connection.py   # Establishes connection with MongoDB
+│   ├── db_setup.py        # Initializes database collections
+│   ├── __init__.py        # Initializes the database module
 │
 │── /routes             # Flask routes for defining API endpoints
 │   ├── auth_routes.py  # Defines authentication-related routes
@@ -41,22 +35,6 @@ This is the backend service for the **Geo Search App**, built using **Flask** an
 │   ├── jwt_handler.py  # Manages JWT token encoding/decoding
 │   ├── config.py       # Handles configuration settings
 │   ├── __init__.py     # Initializes the utils module
-│
-│── /database           # Database connection and setup
-│   ├── db_connection.py   # Establishes connection with MongoDB
-│   ├── db_setup.py        # Initializes database collections
-│   ├── __init__.py        # Initializes the database module
-│
-│── /tests              # Unit and integration tests
-│   ├── test_auth.py    # Tests authentication endpoints
-│   ├── test_places.py  # Tests place search endpoints
-│   ├── test_users.py   # Tests user-related endpoints
-│   ├── __init__.py     # Initializes the tests module
-│
-│── /config             # Environment-based configurations
-│   ├── config_dev.py   # Development environment settings
-│   ├── config_prod.py  # Production environment settings
-│   ├── __init__.py     # Initializes the config module
 │
 │── .env                # Environment variables (API keys, database connection)
 │── .gitignore          # Ignores unnecessary files in Git
@@ -104,4 +82,3 @@ For production deployment:
 
 ## Final Notes
 This **README** provides a clear breakdown of the backend’s **folder structure**, **required files**, and **setup instructions** to help any developer quickly understand and start working on the project. 🚀
-
