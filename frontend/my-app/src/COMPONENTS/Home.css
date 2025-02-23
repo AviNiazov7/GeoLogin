@@ -1,0 +1,42 @@
+.navbar {
+  background-color: #0073e6;
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.navbar button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 10px 20px;
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+.navbar button:hover {
+  text-decoration: underline;
+}
+
+/* צבע טקסט וגבול של כל אפשרות */
+.custom-autocomplete .css-d7l1ni-option {
+  color: #333;
+  padding: 10px;
+ 
+}
+
+/* צבע הרקע כאשר מרחפים מעל אפשרות */
+.custom-autocomplete .css-d7l1ni-option:hover {
+  background-color: #0073e6;
+  color: #ffffff;
+}
+
+/* צבע אפשרות שנבחרה */
+.custom-autocomplete .css-d7l1ni-option:active {
+  background-color: #005bb5;
+  color: white;
+}
