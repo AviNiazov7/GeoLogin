@@ -27,7 +27,7 @@ class AuthController:
         
         token = jwt.encode({
             "user_id": str(user["_id"]),
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+            "exp": datetime.utcnow() + datetime.timedelta(hours=1)
         }, current_app.config["SECRET_KEY"], algorithm="HS256")
         print("token", token)
 
