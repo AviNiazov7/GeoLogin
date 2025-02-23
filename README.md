@@ -51,9 +51,9 @@ npm start
 ### 🔑 Environment Variables
 Create a `.env` file inside `/backend`:
 ```env
-MONGO_URI=mongodb+srv://your_mongo_connection_string
-SECRET_KEY=your_secret_key
-GOOGLE_API_KEY=your_google_places_api_key
+MONGO_URI=mongodb://localhost:27017/GeoLoginDB  
+SECRET_KEY=MySuperSecretKey123!  # JWT
+GOOGLE_API_KEY=your_actual_google_api_key  # Google Places API
 ```
 
 ### 🚀 Deployment
