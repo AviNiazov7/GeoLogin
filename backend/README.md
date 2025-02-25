@@ -68,7 +68,6 @@ Example `.env` file:
 ```sh
 MONGO_URI=mongodb+srv://your_mongo_connection_string
 SECRET_KEY=your_secret_key
-GOOGLE_API_KEY=your_google_places_api_key
 ```
 
 ## Deployment
