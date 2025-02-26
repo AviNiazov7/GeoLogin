@@ -22,6 +22,7 @@ This is the backend service for the **Geo Search App**, built using **Flask** an
 │── /database           # Database connection and setup
 │   ├── db_connection.py   # Establishes connection with MongoDB
 │   ├── db_setup.py        # Initializes database collections
+│   ├── places_db.py       # 
 │   ├── __init__.py        # Initializes the database module
 │
 │── /routes             # Flask routes for defining API endpoints
@@ -68,7 +69,6 @@ Example `.env` file:
 ```sh
 MONGO_URI=mongodb+srv://your_mongo_connection_string
 SECRET_KEY=your_secret_key
-GOOGLE_API_KEY=your_google_places_api_key
 ```
 
 ## Deployment

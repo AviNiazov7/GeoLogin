@@ -17,3 +17,16 @@ def create_user(data):
 
 def find_user_by_email(email):
     return db["users"].find_one({"email": email})
+
+def find_user_by_id(user_id):
+    return db["users"].find_one({"_id": ObjectId(user_id)})
+
+def update_user(user_id, update_data):
+    db["users"].update_one({"_id": ObjectId(user_id)}, {"$set": update_data})
+
+def delete_user(user_id):
+    db["users"].delete_one({"_id": ObjectId(user_id)})
+
+def delete_user_by_email(email):
+    result = db["users"].delete_one({"email": email})
+    return result.deleted_count > 0
