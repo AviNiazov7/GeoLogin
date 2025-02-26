@@ -1,27 +1,31 @@
 .navbar {
-  background-color: #0073e6;
+  background-color: #e3f2fd;
   padding: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
+  
 }
 
 .navbar button {
   background: none;
   border: none;
-  color: white;
-  font-size: 1rem;
+  color: blue;
+  font-size: 1.2rem;
   cursor: pointer;
   padding: 10px 20px;
-  margin: 0 10px;
+  margin:  10px;
   font-weight: bold;
+  
 }
 
 .navbar button:hover {
   text-decoration: underline;
 }
-
+.autocomplete-container{
+  z-index: 9999; 
+}
 /* צבע טקסט וגבול של כל אפשרות */
 .custom-autocomplete .css-d7l1ni-option {
   color: #333;
@@ -35,8 +39,6 @@
   color: #ffffff;
 }
 
-/* צבע אפשרות שנבחרה */
-.custom-autocomplete .css-d7l1ni-option:active {
-  background-color: #005bb5;
-  color: white;
+.Hotel{
+  z-index: 9999; 
 }
