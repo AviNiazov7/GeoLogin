@@ -3,7 +3,7 @@ from backend.database.places_db import save_place, get_saved_places, delete_plac
 
 places_blueprint = Blueprint("places", __name__)
 
-@places_blueprint.route("/save", methods=["POST"])
+@places_blueprint.route("/savenew", methods=["POST"])
 def save_new_place():
     data = request.json
     if not data or "user_id" not in data or "place_id" not in data:
@@ -15,7 +15,7 @@ def save_new_place():
     else:
         return jsonify({"error": message}), 400
 
-@places_blueprint.route("/saved/<user_id>", methods=["GET"])
+@places_blueprint.route("/getsaved/<user_id>", methods=["GET"])
 def get_user_saved_places(user_id):
  
     places = get_saved_places(user_id)
@@ -32,3 +32,5 @@ def remove_place():
         return jsonify({"message": message}), 200
     else:
         return jsonify({"error": message}), 404
+
+        
