@@ -1,0 +1,54 @@
+# קבצי מערכת של Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+*.pyo
+*.pyd
+
+# סביבת עבודה וירטואלית
+venv/
+env/
+.venv/
+.env
+
+# הגדרות של VS Code
+.vscode/
+.settings/
+
+# קובצי מערכת (Windows / Mac)
+.DS_Store
+Thumbs.db
+
+# לוגים
+logs/
+*.log
+nohup.out
+
+# תלות של Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# מסד נתונים מקומי (SQLite)
+*.sqlite3
+*.db
+
+# קבצים סודיים (מפתחות API וכו')
+.env
+*.pem
+*.key
+
+# תוצרים של Jupyter Notebook
+.ipynb_checkpoints/
+
+# קבצים שנוצרים בזמן ריצה
+*.pid
+*.seed
+*.cover
+coverage.xml
+
+# קבצים של Docker
+docker-compose.override.yml
+
+# קבצים של Git
+.git/
