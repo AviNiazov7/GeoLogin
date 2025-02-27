@@ -44,3 +44,23 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+##
+1️⃣ Navigate to the project directory
+```
+cd /GeoLogin/frontend/my-app
+```
+
+2️⃣ Check if the node_modules directory exists (if yes, skip installation)
+```
+ls node_modules
+```
+
+3️⃣ If the directory is missing, install dependencies (only if needed)
+```
+npm install
+```  
+
+4️⃣ Start the project 🚀
+```
+npm start
+```  
