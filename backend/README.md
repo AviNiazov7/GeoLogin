@@ -57,8 +57,11 @@ This is the backend service for the **Geo Search App**, built using **Flask** an
    ```
 
 ## API Endpoints
-- **`POST /api/auth/register`** - User registration  
-- **`POST /api/auth/login`** - User login  
+- **`POST /api/auth/signup`** - User signup 
+- **`POST /api/auth/login`** - User login
+- - **`POST /api/auth/logout`** - User logout
+- - **`POST /api/auth/deete`** - User delete
+
 - **`GET /api/places/search`** - Search for places  
 - **`GET /api/user/profile`** - Get user profile  
 - **`POST /api/user/favorites`** - Save a place to favorites  
