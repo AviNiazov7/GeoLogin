@@ -9,6 +9,7 @@ import { faHotel,faUtensils ,faGasPump ,faStore} from "@fortawesome/free-solid-s
 import { Tooltip } from "react-tooltip";
 import AddPlace from "./AddPlace";
 import SignupDialog from "./SignupDialog";
+import DialogLogin from "./DialogLogin";
 
 // טיפוס נתוני מיקום
 interface Location {
@@ -21,6 +22,7 @@ const Home: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [openAddplace,setopenAddplace]=useState(false)
   const [isSignupOpen, setSignupOpen] = useState(false);
+  const [openlogin,setlogin]=useState(false);
 
 // אייקון מותאם למרקר
 const customIcon = new L.Icon({
@@ -111,8 +113,12 @@ const handleCloseAddPlace = () => {
  <button onClick={handleopenAddplace}>➕</button> 
  <AddPlace isOpen={openAddplace} onClose={handleCloseAddPlace} />
 
- <button onClick={() => setSignupOpen(true)}>Sign Up</button>
+ <button onClick={() => setSignupOpen(true)}>SIGN UP</button>
   <SignupDialog isOpen={isSignupOpen} onClose={() => setSignupOpen(false)} />
+
+    
+ <button onClick={() => setlogin(true)}>LOGIN</button>
+<DialogLogin isOpen={openlogin} onClose={() => setlogin(false)} />
 
         <div className="autocomplete-container" style={{ width: "350px", margin: "10px auto" }}>
           <GooglePlacesAutocomplete
