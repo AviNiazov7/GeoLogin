@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import jwt
 from flask import current_app
-from backend.database.db_setup import create_user, find_user_by_email, delete_user_by_email
+from backend.database.db_setup import create_user, find_user_by_username, delete_user_by_email
 from backend.utils.validators import validate_signup_data, validate_login_data
 from werkzeug.security import check_password_hash
 
@@ -20,9 +20,9 @@ class AuthController:
         if not valid:
             return False, error_message
 
-        user = find_user_by_email(data["email"])
+        user = find_user_by_username(data["username"])
         if not user or not check_password_hash(user["password"], data["password"]):
-            return False, "Invalid email or password"
+            return False, "Invalid username or password"
 
         exp_time = datetime.utcnow() + timedelta(hours=1)
         token = jwt.encode({
@@ -33,13 +33,11 @@ class AuthController:
 
     @staticmethod
     def logout():
-        """ Logout is usually handled in frontend by removing the token, 
-        but we can also blacklist tokens in DB if needed."""
         return True, "User logged out successfully"
 
     @staticmethod
-    def delete_user(email):
-        success = delete_user_by_email(email)
+    def delete_user(username):
+        success = delete_user_by_email(username)
         if success:
             return True, "User deleted successfully"
         else:

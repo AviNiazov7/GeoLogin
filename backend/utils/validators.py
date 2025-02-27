@@ -20,9 +20,6 @@ def validate_signup_data(data):
     return True, None
 
 def validate_login_data(data):
-    required_fields = ["email", "password"]
-    for field in required_fields:
-        if field not in data or not data[field].strip():
-            return False, f"Missing or empty field: {field}"
-
+    if "username" not in data or "password" not in data:
+        return False, "Missing required field: username or password"
     return True, None

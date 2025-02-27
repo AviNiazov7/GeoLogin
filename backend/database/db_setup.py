@@ -1,19 +1,28 @@
 from backend.database.db_connection import db
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from bson.objectid import ObjectId
 
 def create_user(data):
-    if db["users"].find_one({"email": data["email"]}):
-        return False, "User with this email already exists"
+    # בדיקה אם שם המשתמש קיים
+    if db["users"].find_one({"username": data["username"]}):
+        return False, "Username already exists"
 
+    # בדיקה אם האימייל קיים
+    if db["users"].find_one({"email": data["email"]}):
+        return False, "Email already exists"
+
+    # יצירת המשתמש החדש
     user = {
         "username": data["username"],
         "email": data["email"],
-        "password": generate_password_hash(data["password"])
+        "password": generate_password_hash(data["password"])  # גיבוב סיסמה
     }
 
     result = db["users"].insert_one(user)
     return True, str(result.inserted_id)
+
+def find_user_by_username(username):
+    return db["users"].find_one({"username": username})
 
 def find_user_by_email(email):
     return db["users"].find_one({"email": email})
@@ -26,6 +35,10 @@ def update_user(user_id, update_data):
 
 def delete_user(user_id):
     db["users"].delete_one({"_id": ObjectId(user_id)})
+
+def delete_user_by_username(username):
+    result = db["users"].delete_one({"username": username})
+    return result.deleted_count > 0
 
 def delete_user_by_email(email):
     result = db["users"].delete_one({"email": email})
