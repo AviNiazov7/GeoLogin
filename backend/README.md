@@ -58,7 +58,14 @@ This is the backend service for the **Geo Search App**, built using **Flask** an
 
 ## API Endpoints
 
-### 🧑‍💻 User Endpoints
+<table>
+  <tr>
+    <th>👤 User Endpoints</th>
+    <th>📍 Places Endpoints</th>
+  </tr>
+  <tr>
+    <td>
+
 | Method | Endpoint              | Description         |
 |--------|-----------------------|---------------------|
 | POST   | `/api/auth/signup`    | User signup        |
@@ -66,12 +73,18 @@ This is the backend service for the **Geo Search App**, built using **Flask** an
 | POST   | `/api/auth/logout`    | User logout        |
 | DELETE | `/api/auth/delete`    | User delete        |
 
-### 📍 Places Endpoints
+  </td>
+  <td>
+
 | Method  | Endpoint              | Description           |
 |---------|-----------------------|-----------------------|
 | POST    | `/api/places/save`    | Save a new place     |
 | GET     | `/api/places/get`     | Get user places      |
 | DELETE  | `/api/places/delete`  | Delete a saved place |
+
+  </td>
+  </tr>
+</table>
 
 ## Environment Variables
 The backend requires an `.env` file for **API keys** and **database configuration**.  
