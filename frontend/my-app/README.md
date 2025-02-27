@@ -45,16 +45,24 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
+
+
 1️⃣ Navigate to the project directory
 ```
-cd /Users/avrahamniazov/Desktop/IDF/Python/GeoLogin/frontend/my-app
+cd /GeoLogin/frontend/my-app
 ```
 
 2️⃣ Check if the node_modules directory exists (if yes, skip installation)
-```ls node_modules```
+```
+ls node_modules
+```
 
 3️⃣ If the directory is missing, install dependencies (only if needed)
-```npm install```  
+```
+npm install
+```  
 
 4️⃣ Start the project 🚀
-```npm start```  
+```
+npm start
+```  
