@@ -2,40 +2,38 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./Signup.css";
 
-interface SignupDialogProps {
+interface DialogLoginProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
-  const [username, setUsername] = useState("");
+const DialogLogin: React.FC<DialogLoginProps> = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSignup = async () => {
+  const handlelogin = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await axios.post("http://localhost:5001/auth/signup", {
-        username,
-        email,
+      const response = await axios.post("http://localhost:5001/auth/login", {
+      email,
         password,
       });
 
       console.log("Registration successful:", response.data);
-      onClose(); // סוגר את הדיאלוג לאחר הרשמה מוצלחת
+      onClose(); 
     } catch (err) {
       setError("Registration failed. Please try again.");
-      console.error("Signup error:", err);
+      console.error("Login error:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  if (!isOpen) return null; // אם `isOpen` שווה ל- `false`, לא מציג את הרכיב
+  if (!isOpen) return null; 
 
   return (
     <div className="modal-overlay">
@@ -44,21 +42,13 @@ const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
           &times;
         </span>
 
-        <h2 className="titel">Sign Up</h2>
+        <h2 className="titel">Login</h2>
         <label>Email:</label>
         <input
           type="email"
           placeholder="Enter email"
           value={email}
           onChange={(e) =>setEmail (e.target.value)}
-        />
-
-        <label>Username:</label>
-        <input
-          type="text"
-          placeholder="Enter username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
         />
 
         <label>Password:</label>
@@ -72,12 +62,12 @@ const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
         {error && <p className="error-message">{error}</p>}
         <button onClick={onClose}>Close</button>
 
-        <button className="closebutoon" onClick={handleSignup} disabled={loading}>
-          {loading ? "Signing Up..." : "Sign Up"}
+        <button className="closebutoon" onClick={handlelogin} disabled={loading}>
+          {loading ? "login..." : "login"}
         </button>
       </div>
     </div>
   );
 };
 
-export default SignupDialog;
+export default DialogLogin;
