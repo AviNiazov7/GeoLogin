@@ -32,8 +32,7 @@ const customIcon = new L.Icon({
 });
 const ChangeMapView = ({ center }: { center: [number, number] }) => {
   const map = useMap();
-  const newZoom = Math.min(map.getZoom() + 2, 18); // מוודא שהזום לא יעלה על 18
-
+  const newZoom = Math.min(map.getZoom()); 
   map.setView(center, newZoom);
   return null;
 };
