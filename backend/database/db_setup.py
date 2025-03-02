@@ -3,19 +3,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from bson.objectid import ObjectId
 
 def create_user(data):
-    # בדיקה אם שם המשתמש קיים
     if db["users"].find_one({"username": data["username"]}):
         return False, "Username already exists"
 
-    # בדיקה אם האימייל קיים
     if db["users"].find_one({"email": data["email"]}):
         return False, "Email already exists"
 
-    # יצירת המשתמש החדש
     user = {
         "username": data["username"],
         "email": data["email"],
-        "password": generate_password_hash(data["password"])  # גיבוב סיסמה
+        "password": generate_password_hash(data["password"])  
     }
 
     result = db["users"].insert_one(user)

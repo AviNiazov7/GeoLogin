@@ -24,12 +24,14 @@ class AuthController:
         if not user or not check_password_hash(user["password"], data["password"]):
             return False, "Invalid username or password"
 
-        exp_time = datetime.utcnow() + timedelta(hours=1)
+        exp_time = datetime.utcnow() + timedelta(days=2)
         token = jwt.encode({
             "user_id": str(user["_id"]),
+            "username": user["username"],
             "exp": exp_time
         }, current_app.config["SECRET_KEY"], algorithm="HS256")
-        return True, token
+
+        return True, {"token": token, "username": user["username"]}
 
     @staticmethod
     def logout():

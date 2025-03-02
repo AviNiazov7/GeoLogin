@@ -19,11 +19,15 @@ def signup():
 @users_blueprint.route("/login", methods=["POST"])
 def login():
     data = request.json
-    success, token = AuthController.login(data)
+    success, response = AuthController.login(data)
+    
     if success:
-        return jsonify({"token": token}), 200
+        return jsonify({
+            "token": response["token"],
+            "username": response["username"]
+        }), 200
     else:
-        return jsonify({"error": token}), 401
+        return jsonify({"error": response}), 401
 
 @users_blueprint.route("/logout", methods=["POST"])
 def logout():
