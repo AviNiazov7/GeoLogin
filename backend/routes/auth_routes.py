@@ -31,7 +31,7 @@ def login():
 
 @users_blueprint.route("/logout", methods=["POST"])
 def logout():
-    success, message = AuthController.logout()
+    message = AuthController.logout()
     return jsonify({"message": message}), 200
 
 @users_blueprint.route("/delete", methods=["DELETE"])

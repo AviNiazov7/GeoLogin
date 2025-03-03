@@ -12,7 +12,7 @@ def create_user(data):
     user = {
         "username": data["username"],
         "email": data["email"],
-        "password": generate_password_hash(data["password"])  
+        "password": generate_password_hash(data["password"])
     }
 
     result = db["users"].insert_one(user)
@@ -40,3 +40,13 @@ def delete_user_by_username(username):
 def delete_user_by_email(email):
     result = db["users"].delete_one({"email": email})
     return result.deleted_count > 0
+
+from backend.database.db_connection import db
+from bson.objectid import ObjectId
+
+def add_place_to_favorites(user_id, place_id):
+    result = db["users"].update_one(
+        {"_id": ObjectId(user_id)},
+        {"$addToSet": {"favorite_places": place_id}}
+    )
+    return result.modified_count > 0
