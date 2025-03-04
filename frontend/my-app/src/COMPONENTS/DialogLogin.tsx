@@ -30,6 +30,7 @@ const DialogLogin: React.FC<DialogLoginProps> = ({ isOpen, onClose }) => {
         localStorage.setItem("token", token); // שמירת ה-Token ב-LocalStorage
         login(token); // עדכון המצב הגלובלי דרך `AuthContext`
         console.log("Login successful:", response.data);
+        alert("ברוך הבא")
         onClose(); // סגירת הדיאלוג
       } else {
         setError("Login failed: No token received.");

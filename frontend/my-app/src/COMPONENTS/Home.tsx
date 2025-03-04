@@ -10,6 +10,7 @@ import { Tooltip } from "react-tooltip";
 import AddPlace from "./AddPlace";
 import SignupDialog from "./SignupDialog";
 import DialogLogin from "./DialogLogin";
+import { useAuth } from "../Contexts/AuthContext";
 
 // טיפוס נתוני מיקום
 interface Location {
@@ -22,6 +23,8 @@ interface Location {
 const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
 const Home: React.FC = () => {
+  const { isAuthenticated } = useAuth(); // ✅ בדיקה אם המשתמש מחובר
+
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [inputValue, setInputValue] = useState<string>("");
   const [isAddPlaceOpen, setAddPlaceOpen] = useState(false);
@@ -46,8 +49,13 @@ const Home: React.FC = () => {
   const handleOpenAddPlace = () => setAddPlaceOpen(true);
   const handleCloseAddPlace = () => setAddPlaceOpen(false);
 
-  // בחירת מיקום מתוך ה-Autocomplete
+  // בחירת מיקום מתוך ה-Autocomplete - חיפוש מותר רק אם המשתמש מחובר
   const handleLocationSelect = async (value: any) => {
+    if (!isAuthenticated) {
+      alert("⚠️ עליך להתחבר כדי לחפש במפה.");
+      return;
+    }
+
     if (!value || !value.value || !value.value.place_id) {
       console.error("Invalid location selected.");
       return;
@@ -134,8 +142,8 @@ const Home: React.FC = () => {
             }}
           />
         </div>
-
-        <Tooltip id="hotel-tooltip" place="bottom" content="מלונות במיקומך" />
+<div className="Buton">
+   <Tooltip id="hotel-tooltip" place="bottom" content="מלונות במיקומך" />
         <button data-tooltip-id="hotel-tooltip"><FontAwesomeIcon icon={faHotel} size="lg" color="blue" /></button>
 
         <Tooltip id="restrount" place="bottom" content="מסעדות במיקומך" />
@@ -146,6 +154,8 @@ const Home: React.FC = () => {
 
         <Tooltip id="Store" place="bottom" content="חנויות במיקומך" />
         <button data-tooltip-id="Store"><FontAwesomeIcon icon={faStore} size="lg" color="blue" /></button>
+</div>
+       
       </nav>
 
       {/* מפת Leaflet */}

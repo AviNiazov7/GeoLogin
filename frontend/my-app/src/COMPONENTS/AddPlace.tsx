@@ -18,38 +18,63 @@ interface AddPlaceProps {
 }
 
 const AddPlace: React.FC<AddPlaceProps> = ({ isOpen, onClose }) => {
-  const [Place, setPlace] = useState<string>("");
+  const [place, setPlace] = useState<string>("");
   const [details, setDetails] = useState<string>("");
   const [name2, setName] = useState<string>("");
   const [category, setCategory] = useState<string>("מלונות");
 
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!Place.trim()) {
-      alert("יש להזין מיקום");
+    
+    const API_URL = process.env.REACT_APP_API_URL;
+    const token = localStorage.getItem("token"); // ✅ שליפת הטוקן אם נדרש
+  
+    if (!token) {
+      alert("⚠️ אין הרשאה, יש להתחבר תחילה.");
       return;
     }
-
+  
+    if (!place.trim()) {
+      alert("⚠️ יש להזין מיקום");
+      return;
+    }
+  
+    const placeData = {
+      name: place,
+      details,
+      category,
+      address: name2, // ✅ שינוי שם השדה ל-address
+    };
+  
+    console.log("📌 נתונים שנשלחים לשרת:", placeData); // בדיקה
+  
     try {
-      await axios.post("http://localhost:5001/add-place", {
-        name: Place,
-        details,
-        category,
-        name2,
+      await axios.post(`${API_URL}/places/save`, placeData, {
+        headers: {
+          Authorization: `Bearer ${token}`, // אם נדרש אימות
+          "Content-Type": "application/json",
+        },
       });
-
+  
       alert("✅ המקום נוסף בהצלחה!");
       setPlace("");
       setDetails("");
-      setName("");
+      setName(""); // מאפסים את השדות
       setCategory("מלונות");
       onClose();
     } catch (error) {
-      console.error("❌ שגיאה בשליחת הנתונים:", error);
-      alert("❌ שגיאה בשליחת הנתונים לשרת");
+      console.error("על מנת להשתמש בשירותי המערכת עליך להתחבר", error);
+  
+      if (axios.isAxiosError(error) && error.response) {
+        console.error("📌 תגובת השרת:", error.response.data);
+        alert(`❌ שגיאה: ${error.response.data.message || " על מנת להשתמש בשיורתי המערכת עליך להתחבר "}`);
+      } else {
+        alert("❌ שגיאת חיבור, נסה שוב מאוחר יותר.");
+      }
     }
   };
-
+  
   return (
     <Modal isOpen={isOpen} onRequestClose={onClose} className="modal" overlayClassName="overlay">
       <button className="close-btn" onClick={onClose}>✖</button>
@@ -57,9 +82,9 @@ const AddPlace: React.FC<AddPlaceProps> = ({ isOpen, onClose }) => {
       <h2>הוספת מקום חדש</h2>
       <br />
       <form onSubmit={handleSubmit}>
-        <label>🏠הכנס מיקום</label>
+        <label>🏠 הכנס מיקום</label>
         <GooglePlacesAutocomplete
-         apiKey="AIzaSyCad6leGCz2HAUd-aHYoNNSbxoSC2h16wc"
+          apiKey="AIzaSyCad6leGCz2HAUd-aHYoNNSbxoSC2h16wc"
           selectProps={{
             placeholder: "הכנס מיקום...",
             onChange: (value: SingleValue<Option>) => {
@@ -94,7 +119,7 @@ const AddPlace: React.FC<AddPlaceProps> = ({ isOpen, onClose }) => {
         </select>
 
         <div>
-          <button type="submit">➕ שלח לשרת</button>
+          <button type="submit">➕ שלח</button>
           <button onClick={onClose} className="cancel">❌ ביטול</button>
         </div>
       </form>

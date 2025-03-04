@@ -42,3 +42,6 @@
 .Hotel{
   z-index: 9999; 
 }
+.Buton{
+  z-index: 1000;
+}
