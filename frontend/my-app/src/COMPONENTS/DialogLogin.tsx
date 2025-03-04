@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./Signup.css";
+import { useAuth } from "../Contexts/AuthContext";
 
 interface DialogLoginProps {
   isOpen: boolean;
@@ -8,47 +9,54 @@ interface DialogLoginProps {
 }
 
 const DialogLogin: React.FC<DialogLoginProps> = ({ isOpen, onClose }) => {
-  const [email, setEmail] = useState("");
+  const { login } = useAuth(); // קבלת פונקציית התחברות מ-AuthContext
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handlelogin = async () => {
+  const handleLogin = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await axios.post("http://localhost:5001/auth/login", {
-      email,
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, {
+        username,
         password,
       });
 
-      console.log("Registration successful:", response.data);
-      onClose(); 
+      const token = response.data.token; // קבלת ה-Token מהשרת
+      if (token) {
+        localStorage.setItem("token", token); // שמירת ה-Token ב-LocalStorage
+        login(token); // עדכון המצב הגלובלי דרך `AuthContext`
+        console.log("Login successful:", response.data);
+        onClose(); // סגירת הדיאלוג
+      } else {
+        setError("Login failed: No token received.");
+      }
     } catch (err) {
-      setError("Registration failed. Please try again.");
+      setError("Login failed. Please check your credentials.");
       console.error("Login error:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  if (!isOpen) return null; 
+  if (!isOpen) return null; // אם הדיאלוג לא פתוח, אל תציג אותו
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <span className="close" onClick={onClose}>
-          &times;
-        </span>
+        <span className="close" onClick={onClose}>&times;</span>
 
         <h2 className="titel">Login</h2>
-        <label>Email:</label>
+
+        <label>User name</label>
         <input
-          type="email"
-          placeholder="Enter email"
-          value={email}
-          onChange={(e) =>setEmail (e.target.value)}
+          type="text"
+          placeholder="Enter user name"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
 
         <label>Password:</label>
@@ -60,11 +68,11 @@ const DialogLogin: React.FC<DialogLoginProps> = ({ isOpen, onClose }) => {
         />
 
         {error && <p className="error-message">{error}</p>}
-        <button onClick={onClose}>Close</button>
 
-        <button className="closebutoon" onClick={handlelogin} disabled={loading}>
-          {loading ? "login..." : "login"}
+        <button className="closebutoon" onClick={handleLogin} disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
         </button>
+        <button onClick={onClose}>Close</button>
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./Home.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHotel,faUtensils ,faGasPump ,faStore} from "@fortawesome/free-solid-svg-icons";
+import { faHotel, faUtensils, faGasPump, faStore } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "react-tooltip";
 import AddPlace from "./AddPlace";
 import SignupDialog from "./SignupDialog";
@@ -17,50 +17,61 @@ interface Location {
   lng: number;
   label: string;
 }
+
+// מקבל API Key מקובץ .env כדי לשמור על אבטחה
+const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+
 const Home: React.FC = () => {
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [inputValue, setInputValue] = useState<string>("");
-  const [openAddplace,setopenAddplace]=useState(false)
+  const [isAddPlaceOpen, setAddPlaceOpen] = useState(false);
   const [isSignupOpen, setSignupOpen] = useState(false);
-  const [openlogin,setlogin]=useState(false);
+  const [isLoginOpen, setLoginOpen] = useState(false);
 
-// אייקון מותאם למרקר
-const customIcon = new L.Icon({
-  iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png", // אייקון מרקר מותאם
-  iconSize: [32, 32],
-  iconAnchor: [16, 32],
-});
-const ChangeMapView = ({ center }: { center: [number, number] }) => {
-  const map = useMap();
-  const newZoom = Math.min(map.getZoom()); 
-  map.setView(center, newZoom);
-  return null;
-};
+  // אייקון מותאם אישית למפה
+  const customIcon = new L.Icon({
+    iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+  });
 
-const handleopenAddplace=()=>{
-  setopenAddplace(true)
-}
-const handleCloseAddPlace = () => {
-  setopenAddplace(false);
-};
+  // שינוי תצוגת המפה כשמשנים מיקום
+  const ChangeMapView = ({ center }: { center: [number, number] }) => {
+    const map = useMap();
+    map.setView(center, map.getZoom());
+    return null;
+  };
 
+  // פתיחה וסגירה של דיאלוג הוספת מקום
+  const handleOpenAddPlace = () => setAddPlaceOpen(true);
+  const handleCloseAddPlace = () => setAddPlaceOpen(false);
 
-
-  // פונקציה לטיפול בבחירת מיקום
+  // בחירת מיקום מתוך ה-Autocomplete
   const handleLocationSelect = async (value: any) => {
-    if (value && value.value.place_id) {
+    if (!value || !value.value || !value.value.place_id) {
+      console.error("Invalid location selected.");
+      return;
+    }
+
+    try {
       const results = await geocodeByPlaceId(value.value.place_id);
       if (results[0] && results[0].geometry) {
-        const lat = results[0].geometry.location.lat();
-        const lng = results[0].geometry.location.lng();
-        setSelectedLocation({ lat, lng, label: value.label });
-        setInputValue(value.label)
+        setSelectedLocation({
+          lat: results[0].geometry.location.lat(),
+          lng: results[0].geometry.location.lng(),
+          label: value.label,
+        });
+        setInputValue(value.label);
       }
+    } catch (error) {
+      console.error("Error fetching location details:", error);
     }
   };
-  const handleInputChange = (newValue: string) => {
-    setInputValue(newValue); // מעדכן את הטקסט בשדה אבל לא משנה את המיקום
-  };
+
+  // שינוי ערך שדה החיפוש
+  const handleInputChange = (newValue: string) => setInputValue(newValue);
+
+  // עיצוב מותאם אישית ל-Autocomplete
   const customStyles = {
     control: (provided: any) => ({
       ...provided,
@@ -70,9 +81,7 @@ const handleCloseAddPlace = () => {
       padding: "5px",
       fontSize: "16px",
       backgroundColor: "white",
-      "&:hover": {
-        borderColor: "#388E3C",
-      },
+      "&:hover": { borderColor: "#388E3C" },
     }),
     menu: (provided: any) => ({
       ...provided,
@@ -101,61 +110,50 @@ const handleCloseAddPlace = () => {
     }),
   };
 
-
-  
-
   return (
-    
     <div>
       <nav className="navbar">
+        <button onClick={handleOpenAddPlace}>➕</button>
+        <AddPlace isOpen={isAddPlaceOpen} onClose={handleCloseAddPlace} />
 
- <button onClick={handleopenAddplace}>➕</button> 
- <AddPlace isOpen={openAddplace} onClose={handleCloseAddPlace} />
+        <button onClick={() => setSignupOpen(true)}>SIGN UP</button>
+        <SignupDialog isOpen={isSignupOpen} onClose={() => setSignupOpen(false)} />
 
- <button onClick={() => setSignupOpen(true)}>SIGN UP</button>
-  <SignupDialog isOpen={isSignupOpen} onClose={() => setSignupOpen(false)} />
-
-    
- <button onClick={() => setlogin(true)}>LOGIN</button>
-<DialogLogin isOpen={openlogin} onClose={() => setlogin(false)} />
+        <button onClick={() => setLoginOpen(true)}>LOGIN</button>
+        <DialogLogin isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} />
 
         <div className="autocomplete-container" style={{ width: "350px", margin: "10px auto" }}>
           <GooglePlacesAutocomplete
-            apiKey="AIzaSyCad6leGCz2HAUd-aHYoNNSbxoSC2h16wc"
+            apiKey={googleMapsApiKey}
             selectProps={{
               placeholder: "...הכנס מיקום",
               onChange: handleLocationSelect,
-              onInputChange:handleInputChange,
-              inputValue:inputValue,
-              styles:customStyles,
-            
+              onInputChange: handleInputChange,
+              inputValue: inputValue,
+              styles: customStyles,
             }}
           />
         </div>
 
-
-         <Tooltip className="Hotel" id="hotel-tooltip" place="bottom" content="מלונות במיקומך"/>
+        <Tooltip id="hotel-tooltip" place="bottom" content="מלונות במיקומך" />
         <button data-tooltip-id="hotel-tooltip"><FontAwesomeIcon icon={faHotel} size="lg" color="blue" /></button>
 
-        <Tooltip className="Hotel" id="restrount" place="bottom" content="מסעדות במיקומך"/>
-        <button data-tooltip-id="restrount"><FontAwesomeIcon icon={faUtensils} size="lg" color="blue"  /></button>
+        <Tooltip id="restrount" place="bottom" content="מסעדות במיקומך" />
+        <button data-tooltip-id="restrount"><FontAwesomeIcon icon={faUtensils} size="lg" color="blue" /></button>
 
-        <Tooltip className="Hotel" id="gas-station" place="bottom" content="תחנות דלק במיקומך"/>
-        <button data-tooltip-id="gas-station"><FontAwesomeIcon icon={faGasPump } size="lg" color="blue"  /></button>
+        <Tooltip id="gas-station" place="bottom" content="תחנות דלק במיקומך" />
+        <button data-tooltip-id="gas-station"><FontAwesomeIcon icon={faGasPump} size="lg" color="blue" /></button>
 
-        <Tooltip className="Hotel" id="Store" place="bottom" content="חנויות במיקומך"/>
-        <button data-tooltip-id="Store"><FontAwesomeIcon icon={faStore } size="lg" color="blue" /></button>
-
-
-
+        <Tooltip id="Store" place="bottom" content="חנויות במיקומך" />
+        <button data-tooltip-id="Store"><FontAwesomeIcon icon={faStore} size="lg" color="blue" /></button>
       </nav>
 
       {/* מפת Leaflet */}
       <MapContainer
         center={selectedLocation ? [selectedLocation.lat, selectedLocation.lng] : [31.7683, 35.2137]} // ירושלים כברירת מחדל
         zoom={13}
-        style={{ height: "700px", width: "100%" }}
-      >
+        style={{ height: "700px", width: "100%" }}>
+      
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="© OpenStreetMap contributors" />
         
         {selectedLocation && (
@@ -167,9 +165,8 @@ const handleCloseAddPlace = () => {
           </>
         )}
       </MapContainer>
-     
     </div>
   );
 };
 
-export default Home; 
+export default Home;
