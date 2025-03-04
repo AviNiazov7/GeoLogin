@@ -1,5 +1,5 @@
-from datetime import datetime, timedelta
 import jwt
+from datetime import datetime, timedelta
 from flask import current_app
 from backend.database.auth_db import create_user, find_user_by_username, delete_user_by_email
 from backend.utils.validators import validate_signup_data, validate_login_data
@@ -8,8 +8,10 @@ from werkzeug.security import check_password_hash
 class AuthController:
     @staticmethod
     def signup(data):
+        print("Received Data:", data)  # 🔍 בדיקת הנתונים שמתקבלים
         valid, error_message = validate_signup_data(data)
         if not valid:
+            print("Validation failed:", error_message)  # הדפסת שגיאה אפשרית
             return False, error_message
 
         return create_user(data)
@@ -24,7 +26,7 @@ class AuthController:
         if not user or not check_password_hash(user["password"], data["password"]):
             return False, "Invalid username or password"
 
-        exp_time = datetime.utcnow() + timedelta(days=2)  # תוקף של יומיים לטוקן
+        exp_time = datetime.utcnow() + timedelta(days=2) # Token expires in 2 days
         token = jwt.encode({
             "user_id": str(user["_id"]),
             "username": user["username"],

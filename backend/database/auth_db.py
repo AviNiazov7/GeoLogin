@@ -41,9 +41,6 @@ def delete_user_by_email(email):
     result = db["users"].delete_one({"email": email})
     return result.deleted_count > 0
 
-from backend.database.db_connection import db
-from bson.objectid import ObjectId
-
 def add_place_to_favorites(user_id, place_id):
     result = db["users"].update_one(
         {"_id": ObjectId(user_id)},
