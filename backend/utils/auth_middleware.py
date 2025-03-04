@@ -13,14 +13,12 @@ def token_required(f):
             return jsonify({"error": "Token is missing"}), 401
         
         try:
-            # אם מגיע בצורה "Bearer <token>" אז חותכים את הטוקן עצמו
             if "Bearer " in token:
                 token = token.split(" ")[1]
 
             decoded_data = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])
             user_id = decoded_data.get("user_id")
 
-            # בדיקה שהמשתמש קיים במסד הנתונים
             user = db["users"].find_one({"_id": ObjectId(user_id)})
             if not user:
                 return jsonify({"error": "Invalid token"}), 401

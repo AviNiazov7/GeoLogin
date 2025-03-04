@@ -8,10 +8,10 @@ from werkzeug.security import check_password_hash
 class AuthController:
     @staticmethod
     def signup(data):
-        print("Received Data:", data)  # 🔍 בדיקת הנתונים שמתקבלים
+        print("Received Data:", data)
         valid, error_message = validate_signup_data(data)
         if not valid:
-            print("Validation failed:", error_message)  # הדפסת שגיאה אפשרית
+            print("Validation failed:", error_message) 
             return False, error_message
 
         return create_user(data)
