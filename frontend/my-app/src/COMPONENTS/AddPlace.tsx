@@ -31,7 +31,7 @@ const AddPlace: React.FC<AddPlaceProps> = ({ isOpen, onClose }) => {
     }
 
     try {
-      await axios.post("http://localhost:5000/add-place", {
+      await axios.post("http://localhost:5001/add-place", {
         name: Place,
         details,
         category,
