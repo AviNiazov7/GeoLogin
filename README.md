@@ -80,3 +80,9 @@ npm start
 
 <img width="1337" alt="Screenshot 2025-03-05 at 15 30 29" src="https://github.com/user-attachments/assets/c35a40af-5a02-48ad-a97d-248ab9baff0f" />
 
+<img width="1338" alt="Screenshot 2025-03-05 at 15 44 28" src="https://github.com/user-attachments/assets/8a729f35-244b-47ae-8de5-1dc9df04dd05" />
+
+<img width="1336" alt="Screenshot 2025-03-05 at 15 44 30" src="https://github.com/user-attachments/assets/50de9481-cb35-4400-b1b1-151cfafc7a44" />
+
+<img width="1336" alt="Screenshot 2025-03-05 at 15 44 37" src="https://github.com/user-attachments/assets/5bd9fc03-f0ac-4f81-9061-4f987aaf38bd" />
+
