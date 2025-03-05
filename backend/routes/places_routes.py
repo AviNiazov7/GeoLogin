@@ -4,7 +4,7 @@ from backend.utils.auth_middleware import token_required
 
 places_blueprint = Blueprint("places", __name__)
 
-### 📍 save new place ###
+### save new place ###
 @places_blueprint.route("/save", methods=["POST"])
 @token_required
 def save_new_place(user_id):
@@ -25,7 +25,7 @@ def save_new_place(user_id):
         print(f"❌ Error while saving place: {message}")
         return jsonify({"error": message}), 400
 
-### 📍 get all the places ###
+### get all the places ###
 @places_blueprint.route("/get", methods=["GET"])
 @token_required
 def get_user_saved_places(user_id):
