@@ -1,5 +1,4 @@
 from backend.database.places_db import save_place, get_saved_places, delete_place
-from flask import jsonify
 
 class PlacesController:
 
