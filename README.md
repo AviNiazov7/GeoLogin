@@ -78,3 +78,5 @@ npm start
 
 ✅ **Now the project is ready to run! 🚀**
 
+<img width="1337" alt="Screenshot 2025-03-05 at 15 30 29" src="https://github.com/user-attachments/assets/c35a40af-5a02-48ad-a97d-248ab9baff0f" />
+
