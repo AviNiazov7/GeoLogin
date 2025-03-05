@@ -1,13 +1,22 @@
 from backend.database.db_connection import db
 from bson.objectid import ObjectId
+from datetime import datetime
 
 def save_place(data):
     place = {
+        "place_id": data.get("place_id", None),
         "user_id": data["user_id"],  
         "name": data["name"],
         "address": data["address"],
-        "details": data["details"],  
-        "category": data["category"] 
+        "details": data.get("details", ""),  
+        "category": data.get("category", "Unknown"),  
+        "latitude": data.get("latitude", None),  
+        "longitude": data.get("longitude", None),  
+        "contact_info": data.get("contact_info", ""),  
+        "rating": data.get("rating", 0),  
+        "price_level": data.get("price_level", "Unknown"),  
+        "opening_hours": data.get("opening_hours", ""),  
+        "updated_at": datetime.utcnow()  
     }
 
     result = db["places"].insert_one(place)

@@ -4,13 +4,13 @@ class PlacesController:
 
     @staticmethod
     def save_new_place(user_id, data):
-        required_fields = {"name", "address", "details", "category"}
+        required_fields = {"name", "address"} 
         if not isinstance(data, dict) or not required_fields.issubset(data.keys()):
             return False, "Invalid input: Missing required fields"
 
-        data["user_id"] = user_id
-
+        data["user_id"] = user_id 
         success, message = save_place(data)
+        
         if success:
             return True, "Place saved successfully"
         else:
