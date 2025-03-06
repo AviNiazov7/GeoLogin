@@ -12,7 +12,8 @@ def create_user(data):
     user = {
         "username": data["username"],
         "email": data["email"],
-        "password": generate_password_hash(data["password"])
+        "password": generate_password_hash(data["password"]),
+        "favorite_places": [] 
     }
 
     result = db["users"].insert_one(user)
@@ -44,15 +45,14 @@ def delete_user_by_email(email):
 def add_place_to_favorites(user_id, place_id):
     result = db["users"].update_one(
         {"_id": ObjectId(user_id)},
-        {"$addToSet": {"favorite_places": place_id}}
+        {"$addToSet": {"favorite_places": place_id}},  
+        upsert=True 
     )
     return result.modified_count > 0
 
 def get_favorite_places(user_id):
     user = db["users"].find_one({"_id": ObjectId(user_id)}, {"favorite_places": 1})
-    if user and "favorite_places" in user:
-        return user["favorite_places"]
-    return []
+    return user.get("favorite_places", [])
 
 def remove_place_from_favorites(user_id, place_id):
     result = db["users"].update_one(

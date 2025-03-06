@@ -3,6 +3,7 @@ from backend.controllers.auth_controller import AuthController
 
 users_blueprint = Blueprint("users", __name__)
 
+# signup, receiving user details (username, email, password) and creating a new account.
 @users_blueprint.route("/signup", methods=["POST"])
 def signup():
     data = request.json
@@ -16,6 +17,7 @@ def signup():
     else:
         return jsonify({"error": message}), 400
 
+# login, receiving user details (email, password) and returning a token if the user is authenticated.
 @users_blueprint.route("/login", methods=["POST"])
 def login():
     data = request.json
@@ -29,11 +31,13 @@ def login():
     else:
         return jsonify({"error": response}), 401
 
+# logout, receiving a token and invalidating it.
 @users_blueprint.route("/logout", methods=["POST"])
 def logout():
     message = AuthController.logout()
     return jsonify({"message": message}), 200
 
+# delete_user, receiving an email and deleting the user account.
 @users_blueprint.route("/delete", methods=["DELETE"])
 def delete_user():
     data = request.json
