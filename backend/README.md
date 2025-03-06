@@ -1,51 +1,54 @@
-# Geo Search App - Backend  
+# 🌍 Geo Search App - Backend  
 
-## Overview  
+## 🚀 Overview  
 This is the backend service for the **Geo Search App**, built using **Flask** and **MongoDB**. It provides a RESTful API for **place searches, user authentication, favorites management, and search history tracking**.  
 
-## Features  
-- **User Authentication:** Secure registration, login, and session management using JWT.  
-- **Place Management:** Users can add places, retrieve saved places, and delete places.  
-- **Favorites & Search History:** Users can save places as favorites, remove them, and view past searches.  
-- **Place Ratings:** Users can rate places and view existing ratings.  
-- **MongoDB as Database:** Stores user data, search history, place details, and favorite places.  
+<div align="center">
+  <img src="https://media.giphy.com/media/xT0GqeVfYx5T3JSfAQ/giphy.gif" width="600"/>
+</div>
 
-## Folder Structure and File Explanations  
+## ✨ Features  
+- 🔐 **User Authentication:** Secure registration, login, and session management using JWT.  
+- 📌 **Place Management:** Users can add places, retrieve saved places, and delete places.  
+- ⭐ **Favorites Management:** Users can save and remove favorite places.  
+- 🛄 **MongoDB as Database:** Stores user data, favorite places, and place details.  
+
+## 📂 Folder Structure and File Explanations  
 ```bash  
 /backend  
-│── /controllers        # Manages API endpoints and request handling  
-│   ├── auth_controller.py    # Handles user authentication requests  
-│   ├── places_controller.py  # Manages place search operations  
-│   ├── favorites_controller.py  # Handles favorite places operations  
-│   ├── users_controller.py   # Handles user profile operations  
-│   ├── __init__.py            # Initializes the controllers module  
+│️— /controllers        # Manages API endpoints and request handling  
+│   ├️ auth_controller.py    # Handles user authentication requests  
+│   ├️ places_controller.py  # Manages place search operations  
+│   ├️ favorites_controller.py  # Handles favorite places operations  
+│   ├️ users_controller.py   # Handles user profile operations  
+│   └️ __init__.py            # Initializes the controllers module  
 │  
-│── /database           # Database connection and setup  
-│   ├── db_connection.py   # Establishes connection with MongoDB  
-│   ├── places_db.py       # Handles place-related database operations  
-│   ├── favorites_db.py    # Handles favorite places database operations  
-│   ├── auth_db.py         # Handles authentication-related database operations  
-│   ├── __init__.py        # Initializes the database module  
+│️— /database           # Database connection and setup  
+│   ├️ db_connection.py   # Establishes connection with MongoDB  
+│   ├️ places_db.py       # Handles place-related database operations  
+│   ├️ favorites_db.py    # Handles favorite places database operations  
+│   ├️ auth_db.py         # Handles authentication-related database operations  
+│   └️ __init__.py        # Initializes the database module  
 │  
-│── /routes             # Flask routes for defining API endpoints  
-│   ├── auth_routes.py  # Defines authentication-related routes  
-│   ├── places_routes.py # Defines place search-related routes  
-│   ├── favorites_routes.py # Defines favorite places routes  
-│   ├── __init__.py      # Initializes the routes module  
+│️— /routes             # Flask routes for defining API endpoints  
+│   ├️ auth_routes.py  # Defines authentication-related routes  
+│   ├️ places_routes.py # Defines place search-related routes  
+│   ├️ favorites_routes.py # Defines favorite places routes  
+│   └️ __init__.py      # Initializes the routes module  
 │  
-│── /utils              # Utility functions (authentication, validation, etc.)  
-│   ├── auth_middleware.py # Middleware for JWT authentication  
-│   ├── validators.py    # Validation helper functions  
-│   ├── __init__.py     # Initializes the utils module  
+│️— /utils              # Utility functions (authentication, validation, etc.)  
+│   ├️ auth_middleware.py # Middleware for JWT authentication  
+│   ├️ validators.py    # Validation helper functions  
+│   └️ __init__.py     # Initializes the utils module  
 │  
-│── .env                # Environment variables (API keys, database connection)  
-│── .gitignore          # Ignores unnecessary files in Git  
-│── requirements.txt    # List of required Python dependencies  
-│── app.py              # Main Flask application entry point  
-│── README.md           # Backend documentation  
+│️— .env                # Environment variables (API keys, database connection)  
+│️— .gitignore          # Ignores unnecessary files in Git  
+│️— requirements.txt    # List of required Python dependencies  
+│️— app.py              # Main Flask application entry point  
+│️— README.md           # Backend documentation  
 ```
 
-## Installation  
+## 🛠️ Installation  
 1. Install dependencies:  
    ```sh  
    pip install -r requirements.txt  
@@ -56,7 +59,7 @@ This is the backend service for the **Geo Search App**, built using **Flask** an
    python app.py  
    ```  
 
-## API Endpoints  
+## 🌐 API Endpoints  
 
 <table>  
   <tr>  
@@ -82,8 +85,6 @@ This is the backend service for the **Geo Search App**, built using **Flask** an
 | POST    | `/places/save`        | Save a new place     |  
 | GET     | `/places/get`         | Get user places      |  
 | DELETE  | `/places/delete`      | Delete a saved place |  
-| POST    | `/places/rate`        | Rate a place         |  
-| GET     | `/places/ratings`     | Get place ratings    |  
 
   </td>  
   <td>  
@@ -98,7 +99,11 @@ This is the backend service for the **Geo Search App**, built using **Flask** an
   </tr>  
 </table>  
 
-## Environment Variables  
+<div align="center">
+  <img src="https://media.giphy.com/media/3og0IFrHkIglEOg8Ba/giphy.gif" width="600"/>
+</div>
+
+## 🔑 Environment Variables  
 The backend requires an `.env` file for **API keys** and **database configuration**.  
 Example `.env` file:  
 ```sh  
@@ -106,7 +111,7 @@ MONGO_URI=mongodb+srv://your_mongo_connection_string
 SECRET_KEY=your_secret_key  
 ```  
 
-## Deployment  
+## 🚀 Deployment  
 For production deployment:  
 1. Configure `gunicorn` for WSGI-based server hosting.  
 2. Use **Gunicorn** for running Flask in production:  
@@ -115,6 +120,6 @@ For production deployment:
    ```  
 3. Deploy the frontend separately on **Netlify, Vercel, or any static hosting provider**.  
 
-## Final Notes  
-This **README** provides a clear breakdown of the backend’s **folder structure**, **required files**, and **setup instructions**, including the **new features for favorites management and place ratings**, to help any developer quickly understand and start working on the project. 🚀
+## ✅ Final Notes  
+This **README** provides a clear breakdown of the backend’s **folder structure**, **required files**, and **setup instructions**, including the **new features for favorites management**, to help any developer quickly understand and start working on the project. 🚀
 
