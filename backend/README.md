@@ -3,10 +3,6 @@
 ## 🚀 Overview  
 This is the backend service for the **Geo Search App**, built using **Flask** and **MongoDB**. It provides a RESTful API for **place searches, user authentication, favorites management, and search history tracking**.  
 
-<div align="center">
-  <img src="https://media.giphy.com/media/xT0GqeVfYx5T3JSfAQ/giphy.gif" width="600"/>
-</div>
-
 ## ✨ Features  
 - 🔐 **User Authentication:** Secure registration, login, and session management using JWT.  
 - 📌 **Place Management:** Users can add places, retrieve saved places, and delete places.  
@@ -98,10 +94,6 @@ This is the backend service for the **Geo Search App**, built using **Flask** an
   </td>  
   </tr>  
 </table>  
-
-<div align="center">
-  <img src="https://media.giphy.com/media/3og0IFrHkIglEOg8Ba/giphy.gif" width="600"/>
-</div>
 
 ## 🔑 Environment Variables  
 The backend requires an `.env` file for **API keys** and **database configuration**.  
