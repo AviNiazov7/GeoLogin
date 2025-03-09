@@ -1,6 +1,8 @@
 from backend.database.db_connection import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson.objectid import ObjectId
+from datetime import datetime
+import pytz 
 
 def create_user(data):
     if db["users"].find_one({"username": data["username"]}):
@@ -9,10 +11,14 @@ def create_user(data):
     if db["users"].find_one({"email": data["email"]}):
         return False, "Email already exists"
 
+    israel_tz = pytz.timezone("Asia/Jerusalem")
+    local_time = datetime.now(israel_tz).strftime("%H:%M:%S %d/%m/%Y")
+
     user = {
         "username": data["username"],
         "email": data["email"],
         "password": generate_password_hash(data["password"]),
+        "date_created": local_time,
         "favorite_places": [] 
     }
 

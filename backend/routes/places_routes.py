@@ -26,7 +26,7 @@ def save_new_place(user_id):
         print(f"❌ Error while saving place: {message}")
         return jsonify({"error": message}), 400
 
-# Retrieves all saved places for the user.
+# Retrieves all saved places for the user, including ratings
 @places_blueprint.route("/get", methods=["GET"])
 @token_required
 def get_user_saved_places(user_id):
@@ -41,7 +41,7 @@ def get_user_saved_places(user_id):
         print("⚠️ No places found")
         return jsonify({"message": "No places found"}), 200
 
-# Removes a saved place using place_id.
+# Removes a saved place using place_id
 @places_blueprint.route("/delete", methods=["DELETE"])
 @token_required
 def remove_place(user_id):
@@ -60,7 +60,7 @@ def remove_place(user_id):
         print(f"❌ Error deleting place: {message}")
         return jsonify({"error": message}), 404
 
-# Adds a place to the user’s favorites.
+# Adds a place to the user’s favorites
 @places_blueprint.route("/favorites/add", methods=["POST"])
 @token_required
 def add_place_to_favorites(user_id):
@@ -79,7 +79,7 @@ def add_place_to_favorites(user_id):
         print(f"❌ Error adding place to favorites: {message}")
         return jsonify({"error": message}), 400
 
-# Fetches all favorite places of the user.
+# Fetches all favorite places of the user
 @places_blueprint.route("/favorites/get", methods=["GET"])
 @token_required
 def get_favorite_places(user_id):
@@ -93,7 +93,7 @@ def get_favorite_places(user_id):
         print("⚠️ No favorite places found")
         return jsonify({"message": "No favorite places found"}), 200
 
-# Removes a place from favorites.
+# Removes a place from favorites
 @places_blueprint.route("/favorites/remove", methods=["DELETE"])
 @token_required
 def remove_favorite_place(user_id):
