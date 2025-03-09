@@ -1,5 +1,6 @@
 from backend.database.places_db import save_place, get_saved_places, delete_place
 from backend.database.auth_db import add_place_to_favorites, get_favorite_places, remove_place_from_favorites
+from backend.database.db_connection import db
 
 class PlacesController:
     @staticmethod
@@ -30,6 +31,27 @@ class PlacesController:
             return True, "Place removed successfully"
         else:
             return False, message
+        
+    @staticmethod
+    def rate_place(place_id: str, score: float) -> tuple[bool, str]:
+        """ Adds a rating to a place and updates its average rating """
+
+        place = db["places"].find_one({"place_id": place_id})
+        if not place:
+            return False, "Place not found"
+
+        if not (1 <= score <= 5):
+            return False, "Score must be between 1 and 5"
+
+        new_rating_count = place.get("rating_count", 0) + 1
+        current_avg_rating = float(place.get("average_rating", 0))
+        new_average_rating = ((current_avg_rating * place.get("rating_count", 0)) + score) / new_rating_count
+
+        db["places"].update_one(
+            {"place_id": place_id},
+            {"$set": {"average_rating": new_average_rating, "rating_count": new_rating_count}}
+        )
+        return True, "Rating added successfully"
 
 class FavoritesController:
     @staticmethod

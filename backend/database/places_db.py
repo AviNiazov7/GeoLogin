@@ -4,19 +4,11 @@ from datetime import datetime
 import uuid  
 
 def save_place(data):
-
     if "place_id" not in data or not data["place_id"]:
         data["place_id"] = str(uuid.uuid4())  
 
-    ratings = []
-    avg_rating = 0
-    if "score" in data:
-        ratings.append({
-            "user_id": data["user_id"],
-            "score": data["score"],
-            "review": data.get("review", "")
-        })
-        avg_rating = data["score"]
+    initial_rating = data.get("score", 0)
+    initial_rating_count = 1 if "score" in data else 0
 
     place = {
         "place_id": data["place_id"],
@@ -31,8 +23,8 @@ def save_place(data):
         "price_level": data.get("price_level", "Unknown"),
         "opening_hours": data.get("opening_hours", ""),
         "updated_at": datetime.utcnow(),
-        "ratings": ratings, 
-        "average_rating": avg_rating
+        "average_rating": initial_rating, 
+        "rating_count": initial_rating_count  
     }
 
     result = db["places"].insert_one(place)
@@ -40,40 +32,19 @@ def save_place(data):
 
 def get_saved_places(user_id):
     places = list(db["places"].find({"user_id": user_id}, {"_id": 0})) 
-    for place in places:
-        ratings = place.get("ratings", [])
-        if ratings:
-            place["average_rating"] = sum(r["score"] for r in ratings) / len(ratings)
-        else:
-            place["average_rating"] = None 
-
     return places
 
 def delete_place(user_id, place_id):
     result = db["places"].delete_one({"user_id": user_id, "_id": ObjectId(place_id)})
     return (True, "Place deleted successfully") if result.deleted_count > 0 else (False, "Place not found")
 
-def rate_place(user_id, place_id, score, review=""):
+def rate_place(place_id, score):
+    """Updates the rating of a place based on a new rating received"""
     place = db["places"].find_one({"place_id": place_id})
     if not place:
         return False, "Place not found"
 
-    existing_rating = next((r for r in place.get("ratings", []) if r["user_id"] == user_id), None)
-    if existing_rating:
-        return False, "User already rated this place"
-
-    new_rating = {
-        "user_id": user_id,
-        "score": score,
-        "review": review
-    }
-
-    db["places"].update_one({"place_id": place_id}, {"$push": {"ratings": new_rating}})
+    new_avg_rating = score  
+    db["places"].update_one({"place_id": place_id}, {"$set": {"average_rating": new_avg_rating}})
     
-    updated_place = db["places"].find_one({"place_id": place_id})
-    ratings = updated_place.get("ratings", [])
-    avg_rating = sum(r["score"] for r in ratings) / len(ratings)
-
-    db["places"].update_one({"place_id": place_id}, {"$set": {"average_rating": avg_rating}})
-    
-    return True, "Rating added successfully"
+    return True, "Rating updated successfully"

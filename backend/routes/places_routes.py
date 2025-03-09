@@ -111,3 +111,25 @@ def remove_favorite_place(user_id):
     else:
         print(f"❌ Error removing place from favorites: {message}")
         return jsonify({"error": message}), 404
+    
+
+# Updates the rating of a place (each place keeps only one final rating)
+@places_blueprint.route("/rate", methods=["POST"])
+@token_required
+def rate_place(user_id):
+    data = request.json
+    place_id = data.get("place_id")
+    score = data.get("score")
+
+    if not place_id or not score:
+        return jsonify({"error": "Missing place_id or score"}), 400
+
+    if score < 1 or score > 5:
+        return jsonify({"error": "Score must be between 1 and 5"}), 400
+
+    success, message = PlacesController.rate_place(place_id, score)
+    
+    if success:
+        return jsonify({"message": message}), 200
+    else:
+        return jsonify({"error": message}), 400
