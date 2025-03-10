@@ -22,7 +22,7 @@ class PlacesController:
         return get_saved_places(user_id)
     
     @staticmethod
-    def get_all_places(category: str) -> list:
+    def get_all_places(category: str = None) -> list:
         return get_places_by_category(category)
     
     @staticmethod

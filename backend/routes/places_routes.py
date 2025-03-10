@@ -42,18 +42,16 @@ def get_user_saved_places(user_id):
         return jsonify({"message": "No places found"}), 200
     
 # 📌 Retrieves all places for a specific category
-@places_blueprint.route("/getall", methods=["GET"])
-@token_required
-def get_all_places():
-    category = request.args.get("category")
-    
-    if not category:
-        return jsonify({"error": "Category is required"}), 400
+from flask import request, jsonify
+from backend.controllers.places_controller import PlacesController
 
-    print(f"📌 Fetching all places for category {category}")
-    
+# 📌 Retrieves all places for a specific category (without authentication)
+@places_blueprint.route("/category/<string:category>", methods=["GET"])
+def get_all_places(category):
+    print(f"📌 Fetching all places for category: {category}")
+
     places = PlacesController.get_all_places(category)
-    
+
     if places:
         print(f"✅ Retrieved {len(places)} places")
         return jsonify({"all_places": places}), 200
