@@ -111,152 +111,70 @@ For production deployment:
 
 ### 🚀 How the Frontend Should Send Requests
 
-#### **User Endpoints**
-```
-Feature: User Signup
-Method: POST
-Endpoint: /auth/signup
-Request Format: JSON
-Example Request:
+| **Feature**           | **Method** | **Endpoint**            | **Request Format** | **Example Request** |
+|----------------------|-----------|-------------------------|--------------------|----------------------|
+| **User Signup**      | POST      | `/auth/signup`          | JSON               | ```json
 {
-	"username": "user1",
-	"email": "user1@example.com",
-	"password": "Password123!"
+    "username": "user1", 
+    "email": "user1@example.com",
+    "password": "Password123!"
 }
-```
-
-```
-Feature: User Login
-Method: POST
-Endpoint: /auth/login
-Request Format: JSON
-Example Request:
+``` |
+| **User Login**       | POST      | `/auth/login`           | JSON               | ```json
 {
-	"email": "user1@example.com",
-	"password": "Password123!"
+    "email": "user1@example.com", 
+    "password": "Password123!"
 }
-```
-
-```
-Feature: User Logout
-Method: POST
-Endpoint: /auth/logout
-Request Format: JSON
-Example Request:
+``` |
+| **User Logout**      | POST      | `/auth/logout`          | JSON               | ```json
 {}
-```
-
-```
-Feature: Delete User
-Method: DELETE
-Endpoint: /auth/delete
-Request Format: JSON
-Example Request:
+``` |
+| **Delete User**      | DELETE    | `/auth/delete`          | JSON               | ```json
 {
-	"user_id": "user12345"
+    "user_id": "user12345"
 }
-```
+``` |
+| **Save Place**       | POST      | `/places/save`          | JSON               | ```json
+{
+    "name": "Best Pizza", 
+    "address": "123 Main St", 
+    "details": "Italian pizza with fresh ingredients", 
+    "category": "Restaurant", 
+    "latitude": 40.7128, 
+    "longitude": -74.006, 
+    "contact_info": "+1 123-456-7890", 
+    "price_level": "Medium", 
+    "opening_hours": "10:00 AM - 11:00 PM", 
+    "score": 4.5
+}
+``` |
+| **Get Places**       | GET       | `/places/get`           | N/A                | N/A |
+| **Delete Place**     | DELETE    | `/places/delete`        | JSON               | ```json
+{
+    "place_id": "unique_place_id"
+}
+``` |
+| **Add to Favorites** | POST      | `/favorites/add`        | JSON               | ```json
+{
+    "place_id": "unique_place_id"
+}
+``` |
+| **Get Favorites**    | GET       | `/favorites/get`        | N/A                | N/A |
+| **Remove Favorite**  | DELETE    | `/favorites/remove`     | JSON               | ```json
+{
+    "place_id": "unique_place_id"
+}
+``` |
+| **Rate Place**       | POST      | `/places/rate`          | JSON               | ```json
+{
+    "place_id": "unique_place_id", 
+    "score": 4.5
+}
+``` |
+| **Get Places with Ratings** | GET | `/places/get`  | N/A  | N/A |```
 
 ---
 
-#### **Places Endpoints**
-```
-Feature: Save Place
-Method: POST
-Endpoint: /places/save
-Request Format: JSON
-Example Request:
-{
-	"name": "Best Pizza",
-	"address": "123 Main St",
-	"details": "Italian pizza with fresh ingredients",
-	"category": "Restaurant",
-	"latitude": 40.7128,
-	"longitude": -74.006,
-	"contact_info": "+1 123-456-7890",
-	"price_level": "Medium",
-	"opening_hours": "10:00 AM - 11:00 PM",
-	"score": 4.5
-}
-```
-
-```
-Feature: Get Places
-Method: GET
-Endpoint: /places/get
-Request Format: N/A
-Example Request: N/A
-```
-
-```
-Feature: Delete Place
-Method: DELETE
-Endpoint: /places/delete
-Request Format: JSON
-Example Request:
-{
-	"place_id": "unique_place_id"
-}
-```
-
----
-
-#### **Favorites Endpoints**
-```
-Feature: Add to Favorites
-Method: POST
-Endpoint: /favorites/add
-Request Format: JSON
-Example Request:
-{
-	"place_id": "unique_place_id"
-}
-```
-
-```
-Feature: Get Favorites
-Method: GET
-Endpoint: /favorites/get
-Request Format: N/A
-Example Request: N/A
-```
-
-```
-Feature: Remove Favorite
-Method: DELETE
-Endpoint: /favorites/remove
-Request Format: JSON
-Example Request:
-{
-	"place_id": "unique_place_id"
-}
-```
-
----
-
-#### **Ratings Endpoints**
-```
-Feature: Rate Place
-Method: POST
-Endpoint: /places/rate
-Request Format: JSON
-Example Request:
-{
-	"place_id": "unique_place_id",
-	"score": 4.5
-}
-```
-
-```
-Feature: Get Places with Ratings
-Method: GET
-Endpoint: /places/get
-Request Format: N/A
-Example Request: N/A
-```
-
-🚀 **Now you can copy and paste requests easily!** 🚀
----
 
 ## ✅ Final Notes  
 This **README** provides a clear breakdown of the backend’s **folder structure**, **required files**, and **setup instructions**, including the **new features for rating system**, to help any developer quickly understand and start working on the project. 🚀  
