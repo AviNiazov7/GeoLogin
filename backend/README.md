@@ -124,6 +124,7 @@ For production deployment:
 | **User Login**       | POST      | `/auth/login`           | JSON               | ```json { "email": "user1@example.com", "password": "Password123!" }``` |
 | **Save Place**       | POST      | `/places/save`          | JSON               | ```json { "name": "Best Pizza", "address": "123 Main St", "details": "Italian pizza with fresh ingredients", "category": "Restaurant", "latitude": 40.7128, "longitude": -74.006, "contact_info": "+1 123-456-7890", "opening_hours": "10:00 AM - 11:00 PM", "score": 4.5 }``` |
 | **Get Places**       | GET       | `/places/get`           | N/A                | N/A |
+| **Get All Places by Category** | GET | `/places/getall?category=Restaurant` | N/A | N/A |
 | **Delete Place**     | DELETE    | `/places/delete`        | JSON               | ```json { "place_id": "unique_place_id" }``` |
 | **Add to Favorites** | POST      | `/favorites/add`        | JSON               | ```json { "place_id": "unique_place_id" }``` |
 | **Get Favorites**    | GET       | `/favorites/get`        | N/A                | N/A |
@@ -131,7 +132,6 @@ For production deployment:
 | **Rate Place**       | POST      | `/places/rate`          | JSON               | ```json { "place_id": "unique_place_id", "score": 4.5 }``` |
 | **Save Search**      | POST      | `/search/save`          | JSON               | ```json { "query": "Best Pizza in New York" }``` |
 | **Get Search History** | GET     | `/search/get`           | N/A                | N/A |
-| **Get All Places by Category** | GET | `/places/getall?category=Restaurant` | N/A | N/A |
 ---
 
 ## ✅ Final Notes  
