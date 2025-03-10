@@ -122,7 +122,7 @@ For production deployment:
 |----------------------|-----------|-------------------------|--------------------|----------------------|
 | **User Signup**      | POST      | `/auth/signup`          | JSON               | ```json { "username": "user1", "email": "user1@example.com", "password": "Password123!" }``` |
 | **User Login**       | POST      | `/auth/login`           | JSON               | ```json { "email": "user1@example.com", "password": "Password123!" }``` |
-| **Save Place**       | POST      | `/places/save`          | JSON               | ```json { "name": "Best Pizza", "address": "123 Main St", "details": "Italian pizza with fresh ingredients", "category": "Restaurant", "latitude": 40.7128, "longitude": -74.006, "contact_info": "+1 123-456-7890", "price_level": "Medium", "opening_hours": "10:00 AM - 11:00 PM", "score": 4.5 }``` |
+| **Save Place**       | POST      | `/places/save`          | JSON               | ```json { "name": "Best Pizza", "address": "123 Main St", "details": "Italian pizza with fresh ingredients", "category": "Restaurant", "latitude": 40.7128, "longitude": -74.006, "contact_info": "+1 123-456-7890", "opening_hours": "10:00 AM - 11:00 PM", "score": 4.5 }``` |
 | **Get Places**       | GET       | `/places/get`           | N/A                | N/A |
 | **Delete Place**     | DELETE    | `/places/delete`        | JSON               | ```json { "place_id": "unique_place_id" }``` |
 | **Add to Favorites** | POST      | `/favorites/add`        | JSON               | ```json { "place_id": "unique_place_id" }``` |
