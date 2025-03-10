@@ -131,6 +131,7 @@ For production deployment:
 | **Rate Place**       | POST      | `/places/rate`          | JSON               | ```json { "place_id": "unique_place_id", "score": 4.5 }``` |
 | **Save Search**      | POST      | `/search/save`          | JSON               | ```json { "query": "Best Pizza in New York" }``` |
 | **Get Search History** | GET     | `/search/get`           | N/A                | N/A |
+| **Get All Places by Category** | GET | `/places/getall?category=Restaurant` | N/A | N/A |
 ---
 
 ## ✅ Final Notes  
