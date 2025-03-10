@@ -1,15 +1,16 @@
 # 🌍 Geo Search App - Backend  
 
 ## 🚀 Overview  
-This is the backend service for the **Geo Search App**, built using **Flask** and **MongoDB**. It provides a RESTful API for **place searches, user authentication, favorites management, and search history tracking**.  
+This is the backend service for the **Geo Search App**, built using **Flask** and **MongoDB**. It provides a RESTful API for **place searches, user authentication, favorites management, search history tracking, and rating system for places**.  
 
 ## ✨ Features  
 - 🔐 **User Authentication:** Secure registration, login, and session management using JWT.  
 - 📌 **Place Management:** Users can add places, retrieve saved places, and delete places.  
 - ⭐ **Favorites Management:** Users can save and remove favorite places.  
-- 🛄 **MongoDB as Database:** Stores user data, favorite places, and place details.  
+- ⭐ **Place Ratings:** Users can rate places and the system calculates an average rating for each place.  
+- 🎢 **MongoDB as Database:** Stores user data, favorite places, place details, and ratings.  
 
-## 📂 Folder Structure and File Explanations  
+## 💂️ Folder Structure and File Explanations  
 ```bash  
 /backend  
 │️— /controllers        # Manages API endpoints and request handling  
@@ -57,15 +58,7 @@ This is the backend service for the **Geo Search App**, built using **Flask** an
 
 ## 🌐 API Endpoints  
 
-<table>  
-  <tr>  
-    <th>👤 User Endpoints</th>  
-    <th>📌 Places Endpoints</th>  
-    <th>⭐ Favorites Endpoints</th>  
-  </tr>  
-  <tr>  
-    <td>  
-
+### 👤 User Endpoints  
 | Method | Endpoint              | Description         |  
 |--------|-----------------------|---------------------|  
 | POST   | `/auth/signup`        | User signup        |  
@@ -73,27 +66,25 @@ This is the backend service for the **Geo Search App**, built using **Flask** an
 | POST   | `/auth/logout`        | User logout        |  
 | DELETE | `/auth/delete`        | Delete user        |  
 
-  </td>  
-  <td>  
-
+### 📌 Places Endpoints  
 | Method  | Endpoint              | Description           |  
 |---------|-----------------------|-----------------------|  
 | POST    | `/places/save`        | Save a new place     |  
 | GET     | `/places/get`         | Get user places      |  
 | DELETE  | `/places/delete`      | Delete a saved place |  
 
-  </td>  
-  <td>  
-
+### ⭐ Favorites Endpoints  
 | Method  | Endpoint                  | Description                 |  
 |---------|---------------------------|-----------------------------|  
 | POST    | `/favorites/add`           | Add place to favorites      |  
 | GET     | `/favorites/get`           | Get user favorite places    |  
 | DELETE  | `/favorites/remove`        | Remove place from favorites |  
 
-  </td>  
-  </tr>  
-</table>  
+### ✨ Ratings Endpoints  
+| Method  | Endpoint                  | Description                 |  
+|---------|---------------------------|-----------------------------|  
+| POST    | `/places/rate`            | Rate a place                |  
+| GET     | `/places/get`              | Get places with average rating |  
 
 ## 🔑 Environment Variables  
 The backend requires an `.env` file for **API keys** and **database configuration**.  
@@ -112,6 +103,31 @@ For production deployment:
    ```  
 3. Deploy the frontend separately on **Netlify, Vercel, or any static hosting provider**.  
 
-## ✅ Final Notes  
-This **README** provides a clear breakdown of the backend’s **folder structure**, **required files**, and **setup instructions**, including the **new features for favorites management**, to help any developer quickly understand and start working on the project. 🚀
+## 📊 Rating System  
+- When a user saves a place, they can provide an initial rating.  
+- Other users can submit additional ratings for the same place.  
+- The system calculates the **average rating** dynamically.  
+- The `GET /places/get` request now returns the **average rating** for each place.  
 
+**Example of rating submission:**  
+```json  
+{
+  "place_id": "unique_place_id",
+  "score": 4.5
+}
+```  
+
+**Example of getting places with ratings:**  
+```json  
+[
+  {
+    "place_id": "unique_place_id",
+    "name": "Best Pizza",
+    "address": "123 Main St, New York, NY",
+    "average_rating": 4.8
+  }
+]
+```  
+
+## ✅ Final Notes  
+This **README** provides a clear breakdown of the backend’s **folder structure**, **required files**, and **setup instructions**, including the **new features for rating system**, to help any developer quickly understand and start working on the project. 🚀  
