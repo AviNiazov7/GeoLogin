@@ -37,6 +37,7 @@ def delete_place(user_id, place_id):
     result = db["places"].delete_one({"user_id": user_id, "_id": ObjectId(place_id)})
     return (True, "Place deleted successfully") if result.deleted_count > 0 else (False, "Place not found")
 
+# rate a place
 def rate_place(place_id, score):
     place = db["places"].find_one({"place_id": place_id})
     if not place:
@@ -46,3 +47,37 @@ def rate_place(place_id, score):
     db["places"].update_one({"place_id": place_id}, {"$set": {"average_rating": new_avg_rating}})
     
     return True, "Rating updated successfully"
+
+
+# save sreach history 
+def save_search(user_id, query):
+    timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    
+    search_entry = {
+        "query": query,
+        "timestamp": timestamp
+    }
+
+    user = db["users"].find_one({"_id": ObjectId(user_id)})
+
+    if not user:
+        return False, "User not found"
+
+    if "search_history" not in user:
+        db["users"].update_one({"_id": ObjectId(user_id)}, {"$set": {"search_history": []}})
+
+    db["users"].update_one(
+        {"_id": ObjectId(user_id)},
+        {"$push": {"search_history": {"$each": [search_entry], "$slice": -10}}}
+    )
+
+    return True, "Search saved successfully"
+
+# get search history
+def get_search_history(user_id):
+    user = db["users"].find_one({"_id": ObjectId(user_id)}, {"search_history": 1, "_id": 0})
+
+    if not user:
+        return []
+
+    return user.get("search_history", [])

@@ -19,7 +19,7 @@ def create_user(data):
         "email": data["email"],
         "password": generate_password_hash(data["password"]),
         "date_created": local_time,
-        "favorite_places": [] 
+        "favorite_places": []
     }
 
     result = db["users"].insert_one(user)

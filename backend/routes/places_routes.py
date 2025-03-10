@@ -1,9 +1,13 @@
 from flask import Blueprint, jsonify, request
 from backend.controllers.places_controller import PlacesController
 from backend.controllers.places_controller import FavoritesController
+from flask import Blueprint, jsonify, request
+from backend.controllers.places_controller import SearchController
+from backend.utils.auth_middleware import token_required
 from backend.utils.auth_middleware import token_required
 
 places_blueprint = Blueprint("places", __name__)
+search_blueprint = Blueprint("search", __name__)
 
 # Saves a new place for the user
 @places_blueprint.route("/save", methods=["POST"])
@@ -60,7 +64,7 @@ def remove_place(user_id):
         print(f"❌ Error deleting place: {message}")
         return jsonify({"error": message}), 404
 
-# Adds a place to the user’s favorites
+# ⭐ Adds a place to the user’s favorites
 @places_blueprint.route("/favorites/add", methods=["POST"])
 @token_required
 def add_place_to_favorites(user_id):
@@ -79,7 +83,7 @@ def add_place_to_favorites(user_id):
         print(f"❌ Error adding place to favorites: {message}")
         return jsonify({"error": message}), 400
 
-# Fetches all favorite places of the user
+# ⭐ Fetches all favorite places of the user
 @places_blueprint.route("/favorites/get", methods=["GET"])
 @token_required
 def get_favorite_places(user_id):
@@ -93,7 +97,7 @@ def get_favorite_places(user_id):
         print("⚠️ No favorite places found")
         return jsonify({"message": "No favorite places found"}), 200
 
-# Removes a place from favorites
+# ⭐ Removes a place from favorites
 @places_blueprint.route("/favorites/remove", methods=["DELETE"])
 @token_required
 def remove_favorite_place(user_id):
@@ -112,7 +116,6 @@ def remove_favorite_place(user_id):
         print(f"❌ Error removing place from favorites: {message}")
         return jsonify({"error": message}), 404
     
-
 # Updates the rating of a place (each place keeps only one final rating)
 @places_blueprint.route("/rate", methods=["POST"])
 @token_required
@@ -133,3 +136,25 @@ def rate_place(user_id):
         return jsonify({"message": message}), 200
     else:
         return jsonify({"error": message}), 400
+
+# Saves a search query for the user
+@search_blueprint.route("/save", methods=["POST"])
+@token_required
+def save_search(user_id):
+    data = request.json
+    if "query" not in data or not data["query"]:
+        return jsonify({"error": "Query is required"}), 400
+
+    success, message = SearchController.save_search(user_id, data["query"])
+
+    if success:
+        return jsonify({"message": message}), 201
+    else:
+        return jsonify({"error": message}), 400
+
+# Fetches the search history of the user
+@search_blueprint.route("/get", methods=["GET"])
+@token_required
+def get_search_history(user_id):
+    search_history = SearchController.get_search_history(user_id)
+    return jsonify({"search_history": search_history}), 200
