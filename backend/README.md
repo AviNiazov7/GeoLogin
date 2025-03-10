@@ -6,10 +6,10 @@ This is the backend service for the **Geo Search App**, built using **Flask** an
 ## ✨ Features  
 - 🔒 **User Authentication:** Secure registration, login, and session management using JWT.  
 - 📌 **Place Management:** Users can add places, retrieve saved places, and delete places.  
-- ⭐ **Favorites Management:** Users can save and remove favorite places.  
+- ❤️ **Favorites Management:** Users can save and remove favorite places.  
 - ⭐ **Place Ratings:** Users can rate places and the system calculates an average rating for each place.  
-- 🎢 **Search History Tracking:** Saves users' search history and allows them to retrieve it.  
-- 🎢 **MongoDB as Database:** Stores user data, favorite places, place details, search history, and ratings.  
+- 🔍 **Search History Tracking:** Saves users' search history and allows them to retrieve it.  
+- 🗂 **MongoDB as Database:** Stores user data, favorite places, place details, search history, and ratings.  
 
 ## 💂️ Folder Structure and File Explanations  
 ```bash  
@@ -112,7 +112,23 @@ For production deployment:
 ## 📊 Search History System  
 - Every search made by a user is stored in the database.  
 - Users can retrieve their latest searches.  
-- The system keeps up to **10 recent searches** per user.  
+- The system keeps up to **10 recent searches** per user.
+- 
+
+---
+
+### 🚀 How the Frontend Should Send Requests
+
+| **Feature**           | **Method** | **Endpoint**            | **Request Format** | **Example Request** |
+|----------------------|-----------|-------------------------|--------------------|----------------------|
+| **User Signup**      | POST      | `/auth/signup`          | JSON               | ```{ "username": "user1", "email": "user1@example.com", "password": "Password123!" }``` |
+| **User Login**       | POST      | `/auth/login`           | JSON               | ```{ "email": "user1@example.com", "password": "Password123!" }``` |
+| **Save Place**       | POST      | `/places/save`          | JSON               | ```{ "name": "Best Pizza", "address": "123 Main St", "details": "Italian pizza with fresh ingredients", "category": "Restaurant", "latitude": 40.7128, "longitude": -74.006, "contact_info": "+1 123-456-7890", "opening_hours": "10:00 AM - 11:00 PM", "score": 4.5 }``` |
+| **Rate Place**       | POST      | `/places/rate`          | JSON               | ```{ "place_id": "unique_place_id", "score": 4.5 }``` |
+| **Save Search**      | POST      | `/search/save`          | JSON               | ```{ "query": "Best Pizza in New York" }``` |
+| **Get Search History** | GET     | `/search/get`           | N/A                | N/A |
+
+---
 
 ## ✅ Final Notes  
 This **README** provides a clear breakdown of the backend’s **folder structure**, **required files**, and **setup instructions**, including the **new features for rating and search history**, to help any developer quickly understand and start working on the project. 🚀
