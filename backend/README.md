@@ -113,11 +113,8 @@ For production deployment:
 
 | **Feature**           | **Method** | **Endpoint**            | **Request Format** | **Example Request** |
 |----------------------|-----------|-------------------------|--------------------|----------------------|
-| **User Signup**      | POST      | `/auth/signup`          | JSON               | `{ 
-"username": "user1", 
-"email": "user1@example.com", 
-"password": "Password123!" 
-}` |
+| **User Signup**      | POST      | `/auth/signup`          | JSON               | `{ "username": "user1", "email": "user1@example.com", 
+"password": "Password123!" }` |
 | **User Login**       | POST      | `/auth/login`           | JSON               | `{ "email": "user1@example.com", "password": "Password123!" }` |
 | **User Logout**      | POST      | `/auth/logout`          | JSON               | `{}` |
 | **Delete User**      | DELETE    | `/auth/delete`          | JSON               | `{ "user_id": "user12345" }` |
