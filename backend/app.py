@@ -3,7 +3,7 @@ from flask import Flask, jsonify
 from dotenv import load_dotenv
 from backend.routes.auth_routes import users_blueprint
 from backend.routes.places_routes import places_blueprint
-from backend.routes.places_routes import search_blueprint
+from backend.routes.search_routes import search_blueprint
 from flask_cors import CORS
 
 load_dotenv()

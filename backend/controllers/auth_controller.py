@@ -26,7 +26,7 @@ class AuthController:
         if not user or not check_password_hash(user["password"], data["password"]):
             return False, "Invalid username or password"
 
-        exp_time = datetime.utcnow() + timedelta(days=2) # Token expires in 2 days
+        exp_time = datetime.utcnow() + timedelta(hours=24)  # Token expires in 24 hours
         token = jwt.encode({
             "user_id": str(user["_id"]),
             "username": user["username"],

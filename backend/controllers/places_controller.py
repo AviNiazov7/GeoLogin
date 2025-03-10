@@ -1,7 +1,6 @@
 from backend.database.places_db import save_place, get_saved_places, delete_place
 from backend.database.auth_db import add_place_to_favorites, get_favorite_places, remove_place_from_favorites
 from backend.database.db_connection import db
-from backend.database.places_db import save_search, get_search_history
 
 class PlacesController:
     @staticmethod
@@ -72,12 +71,3 @@ class FavoritesController:
             return True, "Place removed from favorites"
         else:
             return False, "Failed to remove place from favorites"
-        
-class SearchController:
-    @staticmethod
-    def save_search(user_id, query):
-        return save_search(user_id, query)
-
-    @staticmethod
-    def get_search_history(user_id):
-        return get_search_history(user_id)
