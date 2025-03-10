@@ -109,25 +109,55 @@ For production deployment:
 - The system calculates the **average rating** dynamically.  
 - The `GET /places/get` request now returns the **average rating** for each place.  
 
-**Example of rating submission:**  
-```json  
-{
-  "place_id": "unique_place_id",
-  "score": 4.5
-}
-```  
+### 🚀 How the Frontend Should Send Requests
 
-**Example of getting places with ratings:**  
-```json  
-[
-  {
-    "place_id": "unique_place_id",
-    "name": "Best Pizza",
-    "address": "123 Main St, New York, NY",
-    "average_rating": 4.8
-  }
-]
-```  
+| **Feature**           | **Method** | **Endpoint**            | **Request Format** | **Example Request** |
+|----------------------|-----------|-------------------------|--------------------|----------------------|
+| **User Signup**      | POST      | `/auth/signup`          | JSON               | `{ "username": "user1", "email": "user1@example.com", "password": "Password123!" }` |
+| **User Login**       | POST      | `/auth/login`           | JSON               | `{ "email": "user1@example.com", "password": "Password123!" }` |
+| **User Logout**      | POST      | `/auth/logout`          | JSON               | `{}` |
+| **Delete User**      | DELETE    | `/auth/delete`          | JSON               | `{ "user_id": "user12345" }` |
+| **Save Place**       | POST      | `/places/save`          | JSON               | `{ "name": "Best Pizza", "address": "123 Main St", "details": "Italian pizza with fresh ingredients", "category": "Restaurant", "latitude": 40.7128, "longitude": -74.006, "contact_info": "+1 123-456-7890", "price_level": "Medium", "opening_hours": "10:00 AM - 11:00 PM", "score": 4.5 }` |
+| **Get Places**       | GET       | `/places/get`           | N/A                | N/A |
+| **Delete Place**     | DELETE    | `/places/delete`        | JSON               | `{ "place_id": "unique_place_id" }` |
+| **Add to Favorites** | POST      | `/favorites/add`        | JSON               | `{ "place_id": "unique_place_id" }` |
+| **Get Favorites**    | GET       | `/favorites/get`        | N/A                | N/A |
+| **Remove Favorite**  | DELETE    | `/favorites/remove`     | JSON               | `{ "place_id": "unique_place_id" }` |
+| **Rate Place**       | POST      | `/places/rate`          | JSON               | `{ "place_id": "unique_place_id", "score": 4.5 }` |
+| **Get Places with Ratings** | GET | `/places/get`  | N/A  | N/A |
+
+---
+
+### 🌌 API Endpoints Overview
+
+#### 👤 **User Authentication**
+| **Method** | **Endpoint** | **Description** |
+|-----------|-------------|----------------|
+| POST | `/auth/signup` | User signup |
+| POST | `/auth/login` | User login |
+| POST | `/auth/logout` | User logout |
+| DELETE | `/auth/delete` | Delete user |
+
+#### 📌 **Places Endpoints**
+| **Method** | **Endpoint** | **Description** |
+|-----------|-------------|----------------|
+| POST | `/places/save` | Save a new place |
+| GET | `/places/get` | Get user places (including ratings) |
+| DELETE | `/places/delete` | Delete a saved place |
+
+#### ⭐ **Favorites Endpoints**
+| **Method** | **Endpoint** | **Description** |
+|-----------|-------------|----------------|
+| POST | `/favorites/add` | Add place to favorites |
+| GET | `/favorites/get` | Get user favorite places |
+| DELETE | `/favorites/remove` | Remove place from favorites |
+
+#### ✨ **Ratings Endpoints**
+| **Method** | **Endpoint** | **Description** |
+|-----------|-------------|----------------|
+| POST | `/places/rate` | Rate a place |
+| GET | `/places/get` | Get places with average rating |
+
 
 ## ✅ Final Notes  
 This **README** provides a clear breakdown of the backend’s **folder structure**, **required files**, and **setup instructions**, including the **new features for rating system**, to help any developer quickly understand and start working on the project. 🚀  
