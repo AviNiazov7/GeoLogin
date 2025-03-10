@@ -71,6 +71,7 @@ This is the backend service for the **Geo Search App**, built using **Flask** an
 |---------|-----------------------|-----------------------|  
 | POST    | `/places/save`        | Save a new place     |  
 | GET     | `/places/get`         | Get user places      |  
+| GET     | `/places/category/Restaurant` | Get All places      |  
 | DELETE  | `/places/delete`      | Delete a saved place |  
 
 ### ❤️ Favorites Endpoints  
