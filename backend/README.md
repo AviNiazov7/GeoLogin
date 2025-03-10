@@ -113,68 +113,20 @@ For production deployment:
 
 | **Feature**           | **Method** | **Endpoint**            | **Request Format** | **Example Request** |
 |----------------------|-----------|-------------------------|--------------------|----------------------|
-| **User Signup**      | POST      | `/auth/signup`          | JSON               | ```json
-{
-    "username": "user1", 
-    "email": "user1@example.com",
-    "password": "Password123!"
-}
-``` |
-| **User Login**       | POST      | `/auth/login`           | JSON               | ```json
-{
-    "email": "user1@example.com", 
-    "password": "Password123!"
-}
-``` |
-| **User Logout**      | POST      | `/auth/logout`          | JSON               | ```json
-{}
-``` |
-| **Delete User**      | DELETE    | `/auth/delete`          | JSON               | ```json
-{
-    "user_id": "user12345"
-}
-``` |
-| **Save Place**       | POST      | `/places/save`          | JSON               | ```json
-{
-    "name": "Best Pizza", 
-    "address": "123 Main St", 
-    "details": "Italian pizza with fresh ingredients", 
-    "category": "Restaurant", 
-    "latitude": 40.7128, 
-    "longitude": -74.006, 
-    "contact_info": "+1 123-456-7890", 
-    "price_level": "Medium", 
-    "opening_hours": "10:00 AM - 11:00 PM", 
-    "score": 4.5
-}
-``` |
+| **User Signup**      | POST      | `/auth/signup`          | JSON               | `{ "username": "user1", "email": "user1@example.com", "password": "Password123!" }` |
+| **User Login**       | POST      | `/auth/login`           | JSON               | `{ "email": "user1@example.com", "password": "Password123!" }` |
+| **User Logout**      | POST      | `/auth/logout`          | JSON               | `{}` |
+| **Delete User**      | DELETE    | `/auth/delete`          | JSON               | `{ "user_id": "user12345" }` |
+| **Save Place**       | POST      | `/places/save`          | JSON               | `{ "name": "Best Pizza", "address": "123 Main St", "details": "Italian pizza with fresh ingredients", "category": "Restaurant", "latitude": 40.7128, "longitude": -74.006, "contact_info": "+1 123-456-7890", "price_level": "Medium", "opening_hours": "10:00 AM - 11:00 PM", "score": 4.5 }` |
 | **Get Places**       | GET       | `/places/get`           | N/A                | N/A |
-| **Delete Place**     | DELETE    | `/places/delete`        | JSON               | ```json
-{
-    "place_id": "unique_place_id"
-}
-``` |
-| **Add to Favorites** | POST      | `/favorites/add`        | JSON               | ```json
-{
-    "place_id": "unique_place_id"
-}
-``` |
+| **Delete Place**     | DELETE    | `/places/delete`        | JSON               | `{ "place_id": "unique_place_id" }` |
+| **Add to Favorites** | POST      | `/favorites/add`        | JSON               | `{ "place_id": "unique_place_id" }` |
 | **Get Favorites**    | GET       | `/favorites/get`        | N/A                | N/A |
-| **Remove Favorite**  | DELETE    | `/favorites/remove`     | JSON               | ```json
-{
-    "place_id": "unique_place_id"
-}
-``` |
-| **Rate Place**       | POST      | `/places/rate`          | JSON               | ```json
-{
-    "place_id": "unique_place_id", 
-    "score": 4.5
-}
-``` |
-| **Get Places with Ratings** | GET | `/places/get`  | N/A  | N/A |```
+| **Remove Favorite**  | DELETE    | `/favorites/remove`     | JSON               | `{ "place_id": "unique_place_id" }` |
+| **Rate Place**       | POST      | `/places/rate`          | JSON               | `{ "place_id": "unique_place_id", "score": 4.5 }` |
+| **Get Places with Ratings** | GET | `/places/get`  | N/A  | N/A |
 
 ---
-
 
 ## ✅ Final Notes  
 This **README** provides a clear breakdown of the backend’s **folder structure**, **required files**, and **setup instructions**, including the **new features for rating system**, to help any developer quickly understand and start working on the project. 🚀  
