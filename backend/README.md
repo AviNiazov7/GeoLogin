@@ -128,36 +128,5 @@ For production deployment:
 
 ---
 
-### 🌌 API Endpoints Overview
-
-#### 👤 **User Authentication**
-| **Method** | **Endpoint** | **Description** |
-|-----------|-------------|----------------|
-| POST | `/auth/signup` | User signup |
-| POST | `/auth/login` | User login |
-| POST | `/auth/logout` | User logout |
-| DELETE | `/auth/delete` | Delete user |
-
-#### 📌 **Places Endpoints**
-| **Method** | **Endpoint** | **Description** |
-|-----------|-------------|----------------|
-| POST | `/places/save` | Save a new place |
-| GET | `/places/get` | Get user places (including ratings) |
-| DELETE | `/places/delete` | Delete a saved place |
-
-#### ⭐ **Favorites Endpoints**
-| **Method** | **Endpoint** | **Description** |
-|-----------|-------------|----------------|
-| POST | `/favorites/add` | Add place to favorites |
-| GET | `/favorites/get` | Get user favorite places |
-| DELETE | `/favorites/remove` | Remove place from favorites |
-
-#### ✨ **Ratings Endpoints**
-| **Method** | **Endpoint** | **Description** |
-|-----------|-------------|----------------|
-| POST | `/places/rate` | Rate a place |
-| GET | `/places/get` | Get places with average rating |
-
-
 ## ✅ Final Notes  
 This **README** provides a clear breakdown of the backend’s **folder structure**, **required files**, and **setup instructions**, including the **new features for rating system**, to help any developer quickly understand and start working on the project. 🚀  
