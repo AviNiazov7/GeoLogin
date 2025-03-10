@@ -73,20 +73,20 @@ This is the backend service for the **Geo Search App**, built using **Flask** an
 | GET     | `/places/get`         | Get user places      |  
 | DELETE  | `/places/delete`      | Delete a saved place |  
 
-### ⭐ Favorites Endpoints  
+### ❤️ Favorites Endpoints  
 | Method  | Endpoint                  | Description                 |  
 |---------|---------------------------|-----------------------------|  
 | POST    | `/favorites/add`           | Add place to favorites      |  
 | GET     | `/favorites/get`           | Get user favorite places    |  
 | DELETE  | `/favorites/remove`        | Remove place from favorites |  
 
-### ✨ Ratings Endpoints  
+### ⭐ Ratings Endpoints  
 | Method  | Endpoint                  | Description                 |  
 |---------|---------------------------|-----------------------------|  
 | POST    | `/places/rate`            | Rate a place                |  
 | GET     | `/places/get`              | Get places with average rating |  
 
-### 📂 Search History Endpoints  
+### 🔍 Search History Endpoints  
 | Method  | Endpoint                  | Description                 |  
 |---------|---------------------------|-----------------------------|  
 | POST    | `/search/save`            | Save user search query      |  
