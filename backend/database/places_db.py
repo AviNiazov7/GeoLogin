@@ -20,7 +20,6 @@ def save_place(data):
         "latitude": data.get("latitude", None),
         "longitude": data.get("longitude", None),
         "contact_info": data.get("contact_info", ""),
-        "price_level": data.get("price_level", "Unknown"),
         "opening_hours": data.get("opening_hours", ""),
         "updated_at": datetime.utcnow(),
         "average_rating": initial_rating, 
@@ -39,7 +38,6 @@ def delete_place(user_id, place_id):
     return (True, "Place deleted successfully") if result.deleted_count > 0 else (False, "Place not found")
 
 def rate_place(place_id, score):
-    """Updates the rating of a place based on a new rating received"""
     place = db["places"].find_one({"place_id": place_id})
     if not place:
         return False, "Place not found"
