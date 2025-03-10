@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, request
 from backend.controllers.places_controller import PlacesController
 from backend.controllers.places_controller import FavoritesController
-from flask import Blueprint, jsonify, request
 from backend.utils.auth_middleware import token_required
 
 places_blueprint = Blueprint("places", __name__)
@@ -38,6 +37,26 @@ def get_user_saved_places(user_id):
     if places:
         print(f"✅ Retrieved {len(places)} places")
         return jsonify({"saved_places": places}), 200
+    else:
+        print("⚠️ No places found")
+        return jsonify({"message": "No places found"}), 200
+    
+# 📌 Retrieves all places for a specific category
+@places_blueprint.route("/getall", methods=["GET"])
+@token_required
+def get_all_places():
+    category = request.args.get("category")
+    
+    if not category:
+        return jsonify({"error": "Category is required"}), 400
+
+    print(f"📌 Fetching all places for category {category}")
+    
+    places = PlacesController.get_all_places(category)
+    
+    if places:
+        print(f"✅ Retrieved {len(places)} places")
+        return jsonify({"all_places": places}), 200
     else:
         print("⚠️ No places found")
         return jsonify({"message": "No places found"}), 200

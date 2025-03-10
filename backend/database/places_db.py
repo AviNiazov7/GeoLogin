@@ -33,6 +33,10 @@ def get_saved_places(user_id):
     places = list(db["places"].find({"user_id": user_id}, {"_id": 0})) 
     return places
 
+def get_places_by_category(category):
+    places = list(db["places"].find({"category": category}, {"_id": 0}))
+    return places
+
 def delete_place(user_id, place_id):
     result = db["places"].delete_one({"user_id": user_id, "_id": ObjectId(place_id)})
     return (True, "Place deleted successfully") if result.deleted_count > 0 else (False, "Place not found")
