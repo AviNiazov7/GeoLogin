@@ -57,7 +57,7 @@ const AddPlace: React.FC<AddPlaceProps> = ({ isOpen, onClose }) => {
         },
       });
   
-      alert("✅ המקום נוסף בהצלחה!");
+      alert(" המקום נוסף בהצלחה!");
       setPlace("");
       setDetails("");
       setName(""); // מאפסים את השדות
@@ -67,10 +67,10 @@ const AddPlace: React.FC<AddPlaceProps> = ({ isOpen, onClose }) => {
       console.error("על מנת להשתמש בשירותי המערכת עליך להתחבר", error);
   
       if (axios.isAxiosError(error) && error.response) {
-        console.error("📌 תגובת השרת:", error.response.data);
-        alert(`❌ שגיאה: ${error.response.data.message || " על מנת להשתמש בשיורתי המערכת עליך להתחבר "}`);
+        console.error(" תגובת השרת:", error.response.data);
+        alert(` שגיאה: ${error.response.data.message || " על מנת להשתמש בשיורתי המערכת עליך להתחבר "}`);
       } else {
-        alert("❌ שגיאת חיבור, נסה שוב מאוחר יותר.");
+        alert(" שגיאת חיבור, נסה שוב מאוחר יותר.");
       }
     }
   };
@@ -82,7 +82,7 @@ const AddPlace: React.FC<AddPlaceProps> = ({ isOpen, onClose }) => {
       <h2>הוספת מקום חדש</h2>
       <br />
       <form onSubmit={handleSubmit}>
-        <label>🏠 הכנס מיקום</label>
+        <label> הכנס מיקום</label>
         <GooglePlacesAutocomplete
           apiKey="AIzaSyCad6leGCz2HAUd-aHYoNNSbxoSC2h16wc"
           selectProps={{
@@ -103,14 +103,14 @@ const AddPlace: React.FC<AddPlaceProps> = ({ isOpen, onClose }) => {
           onChange={(e) => setName(e.target.value)} 
         />
 
-        <label>📌 פרטים נוספים:</label>
+        <label> פרטים נוספים:</label>
         <textarea 
           value={details} 
           onChange={(e) => setDetails(e.target.value)} 
           placeholder="תיאור המקום..."
         />
 
-        <label>📍 קטגוריה:</label>
+        <label> קטגוריה:</label>
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
           <option value="מלונות">🏨 מלונות</option>
           <option value="מסעדות">🍽️ מסעדות</option>
@@ -119,8 +119,8 @@ const AddPlace: React.FC<AddPlaceProps> = ({ isOpen, onClose }) => {
         </select>
 
         <div>
-          <button type="submit">➕ שלח</button>
-          <button onClick={onClose} className="cancel">❌ ביטול</button>
+          <button type="submit">הוספה</button>
+          <button onClick={onClose} className="cancel"> ביטול</button>
         </div>
       </form>
     </Modal>

@@ -10,7 +10,7 @@ interface SignupDialogProps {
 }
 
 const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
-  const { login } = useAuth(); // ✅ שימוש בפונקציה `login` לניהול התחברות
+  const { login,logout } = useAuth(); 
   const API_URL = process.env.REACT_APP_API_URL;
 
   const [username, setUsername] = useState("");
@@ -69,14 +69,20 @@ const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
     }
   };
 
+ 
+
+
+
   if (!isOpen) return null;
   if (moveLogin) return <DialogLogin isOpen={moveLogin} onClose={() => setMoveLogin(false)} />; // ✅ מציג דיאלוג התחברות אם ההרשמה הצליחה ללא טוקן
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <button className="close-button" onClick={onClose}>✖</button>
-        <h2 className="title">הרשמה</h2>
+
+        <h2 className="title3">הרשמה</h2>
+        
+       
 
         <label>אימייל:</label>
         <input type="email" placeholder="הכנס אימייל" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -93,7 +99,8 @@ const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
           {loading ? "⏳ נרשם..." : "🚀 הירשם"}
         </button>
         <button className="cancel-button" onClick={onClose}>❌ ביטול</button>
-      </div>
+        <button className="logout-button" onClick={logout}>🚪 התנתק</button>
+        </div>
     </div>
   );
 };

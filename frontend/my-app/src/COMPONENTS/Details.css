@@ -1,0 +1,25 @@
+.overlay2 {
+    background: rgba(0, 0, 0, 0.6); /* רקע כהה חצי שקוף */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* לוודא שהדיאלוג מעל כל התוכן */
+}
+
+.modal2{
+     background: white;
+    width: 450px; /* רוחב קבוע */
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-in-out;
+  
+}
+   

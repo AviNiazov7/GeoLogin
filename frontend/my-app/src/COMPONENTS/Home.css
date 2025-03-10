@@ -2,7 +2,7 @@
   background-color: #e3f2fd;
   padding: 15px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   color: white;
   z-index: 1000;
@@ -39,9 +39,8 @@
   color: #ffffff;
 }
 
-.Hotel{
-  z-index: 9999; 
-}
+
 .Buton{
   z-index: 1000;
+  /* margin-left: -300px; */
 }

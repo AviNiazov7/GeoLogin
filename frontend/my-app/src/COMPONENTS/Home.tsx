@@ -11,6 +11,7 @@ import AddPlace from "./AddPlace";
 import SignupDialog from "./SignupDialog";
 import DialogLogin from "./DialogLogin";
 import { useAuth } from "../Contexts/AuthContext";
+import Details from "./Details";
 
 // טיפוס נתוני מיקום
 interface Location {
@@ -30,6 +31,8 @@ const Home: React.FC = () => {
   const [isAddPlaceOpen, setAddPlaceOpen] = useState(false);
   const [isSignupOpen, setSignupOpen] = useState(false);
   const [isLoginOpen, setLoginOpen] = useState(false);
+  const [markers, setMarkers] = useState<Array<{ lat: number; lng: number; name: string }>>([]);
+  const [openDetails,setDetails]=useState(false);
 
   // אייקון מותאם אישית למפה
   const customIcon = new L.Icon({
@@ -52,7 +55,8 @@ const Home: React.FC = () => {
   // בחירת מיקום מתוך ה-Autocomplete - חיפוש מותר רק אם המשתמש מחובר
   const handleLocationSelect = async (value: any) => {
     if (!isAuthenticated) {
-      alert("⚠️ עליך להתחבר כדי לחפש במפה.");
+      alert("!עליך להתחבר כדי לחפש במפה.");
+      console.log(isAuthenticated)
       return;
     }
 
@@ -76,6 +80,8 @@ const Home: React.FC = () => {
     }
   };
 
+
+
   // שינוי ערך שדה החיפוש
   const handleInputChange = (newValue: string) => setInputValue(newValue);
 
@@ -94,7 +100,7 @@ const Home: React.FC = () => {
     menu: (provided: any) => ({
       ...provided,
       borderRadius: "8px",
-      overflow: "hidden",
+      overflow: "hidden", 
       boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
       backgroundColor: "white",
     }),
@@ -118,10 +124,71 @@ const Home: React.FC = () => {
     }),
   };
 
+
+
+
+
+  const fetchPlaces = async (type: string) => {
+    if (!selectedLocation) {
+      alert("עליך לבחור מיקום תחילה.");
+      return;
+    }
+  
+    console.log(`🔎 מחפש ${type} ליד:`, selectedLocation);
+  
+    const { lat, lng } = selectedLocation;
+    const location = new google.maps.LatLng(lat, lng);
+    const request = {
+      location,
+      radius: 8000, // חיפוש ברדיוס של 5 ק"מ
+      type,
+    };
+  
+    const service = new google.maps.places.PlacesService(new google.maps.Map(document.createElement("div")));
+  
+    service.nearbySearch(request, (results, status) => {
+      console.log("🔄 קיבלנו תשובה מה-API", status, results);
+  
+      if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+        const newMarkers = results.map((place) => ({
+          lat: place.geometry?.location?.lat() || 0,
+          lng: place.geometry?.location?.lng() || 0,
+          name: place.name || "מקום לא ידוע",
+          type: type, // ✅ שמירת סוג המקום
+        }));
+  
+        console.log("סמנים שנוספו למפה:", newMarkers);
+        
+        // 🔹 ננקה את `markers` ונציג רק את המקומות של הקטגוריה שנבחרה
+        setMarkers(newMarkers);
+      } else {
+        alert(`⚠️ לא נמצאו ${type} באזור זה.`);
+        setMarkers([]); // ננקה את הסמנים אם אין תוצאות
+      }
+    });
+  };
+  const clearMap=()=>{
+    setMarkers([])
+  }
+
+
+
+
+  
+  
+  // פונקציות ייעודיות לכל סוג מקום
+  const fetchRestaurants = () => fetchPlaces("restaurant");
+  const fetchGasStations = () => fetchPlaces("gas_station");
+  const fetchStores = () => fetchPlaces("store");
+  const fetchBusinesses = () => fetchPlaces("point_of_interest");
+  
+
+
+
   return (
     <div>
       <nav className="navbar">
-        <button onClick={handleOpenAddPlace}>➕</button>
+        <button onClick={handleOpenAddPlace}>+</button>
         <AddPlace isOpen={isAddPlaceOpen} onClose={handleCloseAddPlace} />
 
         <button onClick={() => setSignupOpen(true)}>SIGN UP</button>
@@ -129,6 +196,19 @@ const Home: React.FC = () => {
 
         <button onClick={() => setLoginOpen(true)}>LOGIN</button>
         <DialogLogin isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} />
+
+          
+        <button onClick={() => setDetails(true)}>פרטים</button>
+        <Details isOpen={openDetails} onClose={() => setDetails(false)} />
+
+
+
+
+
+   
+         
+
+          
 
         <div className="autocomplete-container" style={{ width: "350px", margin: "10px auto" }}>
           <GooglePlacesAutocomplete
@@ -142,18 +222,29 @@ const Home: React.FC = () => {
             }}
           />
         </div>
-<div className="Buton">
-   <Tooltip id="hotel-tooltip" place="bottom" content="מלונות במיקומך" />
-        <button data-tooltip-id="hotel-tooltip"><FontAwesomeIcon icon={faHotel} size="lg" color="blue" /></button>
+        <div className="Buton">
+  <Tooltip id="hotel-tooltip" place="bottom" content="מלונות במיקומך" />
+  <button onClick={fetchBusinesses} data-tooltip-id="hotel-tooltip">
+    <FontAwesomeIcon icon={faHotel} size="lg" color="blue" />
+  </button>
 
-        <Tooltip id="restrount" place="bottom" content="מסעדות במיקומך" />
-        <button data-tooltip-id="restrount"><FontAwesomeIcon icon={faUtensils} size="lg" color="blue" /></button>
+  <Tooltip id="restaurant-tooltip" place="bottom" content="מסעדות במיקומך" />
+  <button onClick={fetchRestaurants} data-tooltip-id="restaurant-tooltip">
+    <FontAwesomeIcon icon={faUtensils} size="lg" color="blue" />
+  </button>
 
-        <Tooltip id="gas-station" place="bottom" content="תחנות דלק במיקומך" />
-        <button data-tooltip-id="gas-station"><FontAwesomeIcon icon={faGasPump} size="lg" color="blue" /></button>
+  <Tooltip id="gas-station-tooltip" place="bottom" content="תחנות דלק במיקומך" />
+  <button onClick={fetchGasStations} data-tooltip-id="gas-station-tooltip">
+    <FontAwesomeIcon icon={faGasPump} size="lg" color="blue" />
+  </button>
 
-        <Tooltip id="Store" place="bottom" content="חנויות במיקומך" />
-        <button data-tooltip-id="Store"><FontAwesomeIcon icon={faStore} size="lg" color="blue" /></button>
+  <Tooltip id="store-tooltip" place="bottom" content="חנויות במיקומך" />
+  <button onClick={fetchStores} data-tooltip-id="store-tooltip">
+    <FontAwesomeIcon icon={faStore} size="lg" color="blue" />
+  </button>
+
+   <button onClick={clearMap}>נקה תוצאות</button>
+
 </div>
        
       </nav>
@@ -169,11 +260,20 @@ const Home: React.FC = () => {
         {selectedLocation && (
           <>
             <ChangeMapView center={[selectedLocation.lat, selectedLocation.lng]} />
+
             <Marker position={[selectedLocation.lat, selectedLocation.lng]} icon={customIcon}>
               <Popup>{selectedLocation.label}</Popup>
             </Marker>
           </>
         )}
+
+
+{markers.map((marker, index) => (
+  <Marker key={index} position={[marker.lat, marker.lng]} icon={customIcon}>
+    <Popup>{marker.name}</Popup>
+  </Marker>
+))}
+
       </MapContainer>
     </div>
   );
