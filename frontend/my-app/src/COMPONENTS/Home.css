@@ -5,7 +5,7 @@
   justify-content: space-between;
   align-items: center;
   color: white;
-  z-index: 1000;
+
 }
 
 .navbar button {
@@ -42,5 +42,4 @@
 
 .Buton{
   z-index: 1000;
-  /* margin-left: -300px; */
 }

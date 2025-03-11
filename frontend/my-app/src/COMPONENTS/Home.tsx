@@ -90,7 +90,6 @@ const Home: React.FC = () => {
     control: (provided: any) => ({
       ...provided,
       borderRadius: "8px",
-      border: "2px solid #4CAF50",
       boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
       padding: "5px",
       fontSize: "16px",
@@ -125,6 +124,14 @@ const Home: React.FC = () => {
   };
 
 
+  
+
+
+
+
+
+
+
 
 
 
@@ -140,7 +147,7 @@ const Home: React.FC = () => {
     const location = new google.maps.LatLng(lat, lng);
     const request = {
       location,
-      radius: 8000, // חיפוש ברדיוס של 5 ק"מ
+      radius: 5000, 
       type,
     };
   
@@ -166,7 +173,11 @@ const Home: React.FC = () => {
         setMarkers([]); // ננקה את הסמנים אם אין תוצאות
       }
     });
+    
   };
+
+
+  
   const clearMap=()=>{
     setMarkers([])
   }
@@ -188,9 +199,8 @@ const Home: React.FC = () => {
   return (
     <div>
       <nav className="navbar">
-        <button onClick={handleOpenAddPlace}>+</button>
-        <AddPlace isOpen={isAddPlaceOpen} onClose={handleCloseAddPlace} />
 
+       
         <button onClick={() => setSignupOpen(true)}>SIGN UP</button>
         <SignupDialog isOpen={isSignupOpen} onClose={() => setSignupOpen(false)} />
 
@@ -202,13 +212,6 @@ const Home: React.FC = () => {
         <Details isOpen={openDetails} onClose={() => setDetails(false)} />
 
 
-
-
-
-   
-         
-
-          
 
         <div className="autocomplete-container" style={{ width: "350px", margin: "10px auto" }}>
           <GooglePlacesAutocomplete
@@ -242,6 +245,11 @@ const Home: React.FC = () => {
   <button onClick={fetchStores} data-tooltip-id="store-tooltip">
     <FontAwesomeIcon icon={faStore} size="lg" color="blue" />
   </button>
+
+
+ <Tooltip id="addplace" place="bottom" content="הוסף מקום"/>
+        <button className="Buton" onClick={handleOpenAddPlace}data-tooltip-id="addplace">+</button>
+        <AddPlace isOpen={isAddPlaceOpen} onClose={handleCloseAddPlace} />
 
    <button onClick={clearMap}>נקה תוצאות</button>
 

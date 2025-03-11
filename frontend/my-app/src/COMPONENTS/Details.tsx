@@ -39,7 +39,7 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
       console.log("📌 מקומות מהשרת:", response.data);
       setPlaces(response.data.saved_places || []);
     } catch (err) {
-      setError("❌ שגיאה בטעינת הנתונים");
+      setError("אנא התחבר תחילה");
       console.error("❌ שגיאה:", err);
     } finally {
       setLoading(false);
@@ -55,8 +55,7 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
     <Modal isOpen={isOpen} onRequestClose={onClose} className="modal2" overlayClassName="overlay2">
       <div >
         <h2 >רשימת מקומות</h2>
-        <button onClick={fetchPlaces} disabled={loading}>רענן</button>
-        <button onClick={onClose}>סגור</button>
+       
       </div>
 
       {loading && <p>טוען נתונים...</p>}
@@ -65,13 +64,16 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
       <div>
         {places.map((place) => (
           <div key={place.id} >
-            <div>{place.name}</div>
-            <p><strong>כתובת:</strong> {place.address}</p>
+            <div><strong>שם המקום:</strong>{place.address}</div>
+            <p><strong>כתובת:</strong> {place.name}</p>
             <p><strong>קטגוריה:</strong> {place.category}</p>
             {place.details && <p><strong>תיאור:</strong> {place.details}</p>}
           </div>
         ))}
       </div>
+        <button onClick={fetchPlaces} disabled={loading}>רענן</button>
+        <button onClick={onClose}>סגור</button>
+
     </Modal>
   );
 };
