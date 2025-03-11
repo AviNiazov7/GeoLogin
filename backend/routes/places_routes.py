@@ -66,10 +66,18 @@ def get_places_by_category_and_location():
 
         if places:
             print(f"✅ Retrieved {len(places)} places")
-            return jsonify({"places": places}), 200
+            return jsonify({
+                "latitude": latitude,
+                "longitude": longitude,
+                "places": places
+            }), 200
         else:
             print("⚠️ No places found in this radius")
-            return jsonify({"message": "No places found"}), 200
+            return jsonify({
+                "latitude": latitude,
+                "longitude": longitude,
+                "message": "No places found"
+            }), 200
     except Exception as e:
         print(f"❌ Error: {str(e)}")
         return jsonify({"error": "Internal server error"}), 500

@@ -1,7 +1,6 @@
 from backend.database.db_connection import db
 from backend.database.search_db import save_search, get_search_history
 
-
 class SearchController:
     @staticmethod
     def save_search(user_id, query):
