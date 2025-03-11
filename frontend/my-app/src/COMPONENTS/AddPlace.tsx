@@ -28,7 +28,7 @@ const AddPlace: React.FC<AddPlaceProps> = ({ isOpen, onClose }) => {
     e.preventDefault();
     
     const API_URL = process.env.REACT_APP_API_URL;
-    const token = localStorage.getItem("token"); // ✅ שליפת הטוקן אם נדרש
+    const token = localStorage.getItem("token");
   
     if (!token) {
       alert("⚠️ אין הרשאה, יש להתחבר תחילה.");
@@ -40,40 +40,62 @@ const AddPlace: React.FC<AddPlaceProps> = ({ isOpen, onClose }) => {
       return;
     }
   
-    const placeData = {
-      name: place,
-      details,
-      category,
-      address: name2, // ✅ שינוי שם השדה ל-address
-    };
-  
-    console.log("📌 נתונים שנשלחים לשרת:", placeData); // בדיקה
-  
     try {
+      // 🔹 שליפת קואורדינטות מהמיקום שהוזן
+      const geocodeResponse = await axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json`,
+        {
+          params: {
+            address: place,
+            key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY, // ודא שיש לך מפתח API
+          },
+        }
+      );
+  
+      if (!geocodeResponse.data.results.length) {
+        alert("⚠️ לא נמצאו קואורדינטות עבור המיקום שהוזן.");
+        return;
+      }
+  
+      const location = geocodeResponse.data.results[0].geometry.location;
+      console.log("📌 קואורדינטות שנמצאו:", location);
+  
+      const placeData = {
+        name: place,
+        details,
+        category,
+        address: name2,
+        latitude: location.lat,  // ✅ מוסיף קואורדינטות
+        longitude: location.lng, // ✅ מוסיף קואורדינטות
+      };
+  
+      console.log("📌 נתונים שנשלחים לשרת:", placeData);
+  
       await axios.post(`${API_URL}/places/save`, placeData, {
         headers: {
-          Authorization: `Bearer ${token}`, // אם נדרש אימות
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
   
-      alert(" המקום נוסף בהצלחה!");
+      alert("✅ המקום נוסף בהצלחה!");
       setPlace("");
       setDetails("");
-      setName(""); // מאפסים את השדות
+      setName("");
       setCategory("מלונות");
       onClose();
     } catch (error) {
-      console.error("על מנת להשתמש בשירותי המערכת עליך להתחבר", error);
+      console.error("🚨 שגיאה בשליחת הנתונים:", error);
   
       if (axios.isAxiosError(error) && error.response) {
-        console.error(" תגובת השרת:", error.response.data);
-        alert(` שגיאה: ${error.response.data.message || " על מנת להשתמש בשיורתי המערכת עליך להתחבר "}`);
+        console.error("🔴 תגובת השרת:", error.response.data);
+        alert(` שגיאה: ${error.response.data.message || " על מנת להשתמש בשירותי המערכת עליך להתחבר "}`);
       } else {
-        alert(" שגיאת חיבור, נסה שוב מאוחר יותר.");
+        alert("❌ שגיאת חיבור, נסה שוב מאוחר יותר.");
       }
     }
   };
+  
   
   return (
     <Modal isOpen={isOpen} onRequestClose={onClose} className="modal" overlayClassName="overlay">
