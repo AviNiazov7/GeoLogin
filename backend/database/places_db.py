@@ -12,8 +12,6 @@ def save_place(data):
 
     initial_rating = data.get("score", 0)
     initial_rating_count = 1 if "score" in data else 0
-
-    # ✅ שינוי הקורדינטות לפורמט GeoJSON המתאים
     place = {
         "place_id": data["place_id"],
         "user_id": data["user_id"],
@@ -21,7 +19,7 @@ def save_place(data):
         "address": data["address"],
         "details": data.get("details", ""),
         "category": data.get("category", ""),
-        "location": {  # ✅ שימוש בפורמט GeoJSON
+        "location": {  
             "type": "Point",
             "coordinates": [data.get("longitude", None), data.get("latitude", None)]
         },
@@ -39,20 +37,19 @@ def get_saved_places(user_id):
     places = list(db["places"].find({"user_id": user_id}, {"_id": 0})) 
     return places
 
-# ✅ חיפוש מסעדות לפי קטגוריה ורדיוס של 5 ק"מ
 def get_places_by_category_and_location(category, latitude, longitude):
     places = db["places"].find({
         "category": category,
         "location": {
-            "$nearSphere": {  # ✅ שימוש ב-$nearSphere לחיפוש תקין
+            "$nearSphere": {  
                 "$geometry": {
                     "type": "Point",
                     "coordinates": [longitude, latitude]
                 },
-                "$maxDistance": 5000  # רדיוס חיפוש של 5 ק"מ
+                "$maxDistance": 5000  
             }
         }
-    }, {"_id": 0})  # מחזיר את כל הנתונים חוץ מה-_id
+    }, {"_id": 0})  
 
     return list(places)
 
@@ -60,7 +57,6 @@ def delete_place(user_id, place_id):
     result = db["places"].delete_one({"user_id": user_id, "_id": ObjectId(place_id)})
     return (True, "Place deleted successfully") if result.deleted_count > 0 else (False, "Place not found")
 
-# ✅ עדכון דירוג מסעדה
 def rate_place(place_id, score):
     place = db["places"].find_one({"place_id": place_id})
     if not place:
