@@ -44,24 +44,36 @@ def get_user_saved_places(user_id):
 # 📌 Retrieves places by category & location (radius 5000 meters) using POST
 @places_blueprint.route("/category", methods=["POST"])
 def get_places_by_category_and_location():
-    data = request.json
-    category = data.get("category")
-    latitude = data.get("latitude")
-    longitude = data.get("longitude")
+    try:
+        data = request.json
+        category = data.get("category")
+        latitude = data.get("latitude")
+        longitude = data.get("longitude")
 
-    if not category or latitude is None or longitude is None:
-        return jsonify({"error": "Category, latitude, and longitude are required"}), 400
+        if not category or latitude is None or longitude is None:
+            return jsonify({"error": "Category, latitude, and longitude are required"}), 400
 
-    print(f"📌 Fetching places in category '{category}' near ({latitude}, {longitude})")
-    places = PlacesController.get_places_by_category_and_location(category, latitude, longitude)
+        # Ensure latitude & longitude are floats
+        try:
+            latitude = float(latitude)
+            longitude = float(longitude)
+        except ValueError:
+            return jsonify({"error": "Latitude and longitude must be numbers"}), 400
 
-    if places:
-        print(f"✅ Retrieved {len(places)} places")
-        return jsonify({"places": places}), 200
-    else:
-        print("⚠️ No places found in this radius")
-        return jsonify({"message": "No places found"}), 200
+        print(f"📌 Fetching places in category '{category}' near ({latitude}, {longitude})")
 
+        places = PlacesController.get_places_by_category_and_location(category, latitude, longitude)
+
+        if places:
+            print(f"✅ Retrieved {len(places)} places")
+            return jsonify({"places": places}), 200
+        else:
+            print("⚠️ No places found in this radius")
+            return jsonify({"message": "No places found"}), 200
+    except Exception as e:
+        print(f"❌ Error: {str(e)}")
+        return jsonify({"error": "Internal server error"}), 500
+    
 # 📌 Removes a saved place using place_id
 @places_blueprint.route("/delete", methods=["DELETE"])
 @token_required
