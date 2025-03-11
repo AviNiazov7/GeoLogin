@@ -41,17 +41,18 @@ def get_user_saved_places(user_id):
         print("⚠️ No places found")
         return jsonify({"message": "No places found"}), 200
 
-# 📌 Retrieves places by category & location (radius 5000 meters)
-@places_blueprint.route("/category/<string:category>", methods=["GET"])
-def get_places_by_category_and_location(category):
-    latitude = request.args.get("latitude", type=float)
-    longitude = request.args.get("longitude", type=float)
+# 📌 Retrieves places by category & location (radius 5000 meters) using POST
+@places_blueprint.route("/category", methods=["POST"])
+def get_places_by_category_and_location():
+    data = request.json
+    category = data.get("category")
+    latitude = data.get("latitude")
+    longitude = data.get("longitude")
 
-    if latitude is None or longitude is None:
-        return jsonify({"error": "Latitude and Longitude are required"}), 400
+    if not category or latitude is None or longitude is None:
+        return jsonify({"error": "Category, latitude, and longitude are required"}), 400
 
     print(f"📌 Fetching places in category '{category}' near ({latitude}, {longitude})")
-
     places = PlacesController.get_places_by_category_and_location(category, latitude, longitude)
 
     if places:
