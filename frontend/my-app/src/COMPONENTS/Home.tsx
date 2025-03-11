@@ -144,42 +144,65 @@ const Home: React.FC = () => {
     console.log(`🔎 מחפש ${type} ליד:`, selectedLocation);
   
     const { lat, lng } = selectedLocation;
-    const location = new google.maps.LatLng(lat, lng);
-    const request = {
-      location,
-      radius: 5000, 
-      type,
-    };
-  
     const service = new google.maps.places.PlacesService(new google.maps.Map(document.createElement("div")));
   
-    service.nearbySearch(request, (results, status) => {
-      console.log("🔄 קיבלנו תשובה מה-API", status, results);
+    // יצירת שלוש נקודות חיפוש קרובות
+    const locations = [
+      new google.maps.LatLng(lat, lng),
+      new google.maps.LatLng(lat + 0.01, lng), // טיפה צפונה
+      new google.maps.LatLng(lat, lng + 0.01), // טיפה מזרחה
+    ];
   
-      if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-        const newMarkers = results.map((place) => ({
-          lat: place.geometry?.location?.lat() || 0,
-          lng: place.geometry?.location?.lng() || 0,
-          name: place.name || "מקום לא ידוע",
-          type: type, // ✅ שמירת סוג המקום
-        }));
+    let allResults: google.maps.places.PlaceResult[] = [];
   
-        console.log("סמנים שנוספו למפה:", newMarkers);
-        
-        // 🔹 ננקה את `markers` ונציג רק את המקומות של הקטגוריה שנבחרה
-        setMarkers(newMarkers);
-      } else {
-        alert(`⚠️ לא נמצאו ${type} באזור זה.`);
-        setMarkers([]); // ננקה את הסמנים אם אין תוצאות
-      }
-    });
-    
+    const fetchFromLocation = (location: google.maps.LatLng) => {
+      return new Promise<google.maps.places.PlaceResult[]>((resolve) => {
+        const request = {
+          location,
+          radius: 3000, // רדיוס קטן יותר כדי למנוע כפילויות
+          type,
+        };
+  
+        service.nearbySearch(request, (results, status) => {
+          if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+            resolve(results);
+          } else {
+            resolve([]);
+          }
+        });
+      });
+    };
+  
+    // מבצע את שלושת הקריאות במקביל
+    const resultsArray = await Promise.all(locations.map(fetchFromLocation));
+  
+    // איחוד התוצאות ומניעת כפילויות
+    allResults = resultsArray.flat().filter((place, index, self) =>
+      index === self.findIndex((p) => p.place_id === place.place_id)
+    );
+  
+    console.log(`✅ קיבלנו ${allResults.length} תוצאות`);
+  
+    if (allResults.length > 0) {
+      const newMarkers = allResults.map((place) => ({
+        lat: place.geometry?.location?.lat() || 0,
+        lng: place.geometry?.location?.lng() || 0,
+        name: place.name || "מקום לא ידוע",
+        type,
+      }));
+  
+      console.log("📍 סמנים שנוספו למפה:", newMarkers);
+      setMarkers(newMarkers);
+    } else {
+      alert(`⚠️ לא נמצאו ${type} באזור זה.`);
+      setMarkers([]);
+    }
   };
-
-
+  
   
   const clearMap=()=>{
     setMarkers([])
+
   }
 
 
@@ -191,7 +214,7 @@ const Home: React.FC = () => {
   const fetchRestaurants = () => fetchPlaces("restaurant");
   const fetchGasStations = () => fetchPlaces("gas_station");
   const fetchStores = () => fetchPlaces("store");
-  const fetchBusinesses = () => fetchPlaces("point_of_interest");
+  const fetchBusinesses = () => fetchPlaces("lodging");
   
 
 
