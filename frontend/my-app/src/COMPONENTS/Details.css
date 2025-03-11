@@ -25,4 +25,6 @@
     overflow-x: hidden; /* מונע גלילה אופקית */
     border: 1px solid #ccc; /* מסגרת אופציונלית */
 }
-   
+   .onedeatail{
+    border: 1px solid black;
+   }
