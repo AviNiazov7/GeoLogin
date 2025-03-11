@@ -37,19 +37,22 @@ def get_saved_places(user_id):
     places = list(db["places"].find({"user_id": user_id}, {"_id": 0})) 
     return places
 
-def get_places_by_category_and_location(category, latitude, longitude):
-    places = db["places"].find({
-        "category": category,
-        "location": {
-            "$nearSphere": {  
-                "$geometry": {
-                    "type": "Point",
-                    "coordinates": [longitude, latitude]
-                },
-                "$maxDistance": 5000  
+def get_places_by_category_and_location_db(category, latitude, longitude):
+    places = db["places"].find(
+        {
+            "category": category,
+            "location": {
+                "$near": {
+                    "$geometry": {
+                        "type": "Point",
+                        "coordinates": [longitude, latitude]
+                    },
+                    "$maxDistance": 5000  
+                }
             }
-        }
-    }, {"_id": 0})  
+        },
+        {"_id": 0, "name": 1, "address": 1, "latitude": 1, "longitude": 1, "category": 1}  # מחזיר את הקורדינטות!
+    )
 
     return list(places)
 

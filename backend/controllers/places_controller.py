@@ -1,4 +1,4 @@
-from backend.database.places_db import save_place, get_saved_places, get_places_by_category_and_location, delete_place
+from backend.database.places_db import save_place, get_saved_places, get_places_by_category_and_location_db, delete_place
 from backend.database.auth_db import add_place_to_favorites, get_favorite_places, remove_place_from_favorites
 from backend.database.db_connection import db
 
@@ -21,10 +21,26 @@ class PlacesController:
     def get_user_saved_places(user_id: str) -> list:
         return get_saved_places(user_id)
     
+    from backend.database.places_db import get_places_by_category_and_location_db
+
     @staticmethod
     def get_places_by_category_and_location(category: str, latitude: float, longitude: float) -> list:
-        return get_places_by_category_and_location(category, latitude, longitude)
+        places = get_places_by_category_and_location_db(category, latitude, longitude)
 
+        if places:
+            return [
+                {
+                    "name": place["name"],
+                    "address": place["address"],
+                    "latitude": place["latitude"],
+                    "longitude": place["longitude"],
+                    "category": place["category"]
+                }
+                for place in places
+            ]
+        else:
+            return []
+        
     @staticmethod
     def remove_place(user_id: str, place_id: str) -> tuple[bool, str]:
         if not user_id or not place_id:
