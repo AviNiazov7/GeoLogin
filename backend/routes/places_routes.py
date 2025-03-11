@@ -61,9 +61,7 @@ def get_places_by_category_and_location():
             return jsonify({"error": "Latitude and longitude must be numbers"}), 400
 
         print(f"📌 Fetching places in category '{category}' near ({latitude}, {longitude})")
-
         places = PlacesController.get_places_by_category_and_location(category, latitude, longitude)
-
         if places:
             print(f"✅ Retrieved {len(places)} places")
             return jsonify({

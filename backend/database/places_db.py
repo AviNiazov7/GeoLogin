@@ -53,7 +53,6 @@ def get_places_by_category_and_location_db(category, latitude, longitude):
         },
         {"_id": 0, "name": 1, "address": 1, "latitude": 1, "longitude": 1, "category": 1}  # מחזיר את הקורדינטות!
     )
-
     return list(places)
 
 def delete_place(user_id, place_id):
