@@ -40,23 +40,25 @@ def get_user_saved_places(user_id):
     else:
         print("⚠️ No places found")
         return jsonify({"message": "No places found"}), 200
-    
-# 📌 Retrieves all places for a specific category
-from flask import request, jsonify
-from backend.controllers.places_controller import PlacesController
 
-# 📌 Retrieves all places for a specific category (without authentication)
+# 📌 Retrieves places by category & location (radius 5000 meters)
 @places_blueprint.route("/category/<string:category>", methods=["GET"])
-def get_all_places(category):
-    print(f"📌 Fetching all places for category: {category}")
+def get_places_by_category_and_location(category):
+    latitude = request.args.get("latitude", type=float)
+    longitude = request.args.get("longitude", type=float)
 
-    places = PlacesController.get_all_places(category)
+    if latitude is None or longitude is None:
+        return jsonify({"error": "Latitude and Longitude are required"}), 400
+
+    print(f"📌 Fetching places in category '{category}' near ({latitude}, {longitude})")
+
+    places = PlacesController.get_places_by_category_and_location(category, latitude, longitude)
 
     if places:
         print(f"✅ Retrieved {len(places)} places")
-        return jsonify({"all_places": places}), 200
+        return jsonify({"places": places}), 200
     else:
-        print("⚠️ No places found")
+        print("⚠️ No places found in this radius")
         return jsonify({"message": "No places found"}), 200
 
 # 📌 Removes a saved place using place_id

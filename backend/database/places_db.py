@@ -33,8 +33,20 @@ def get_saved_places(user_id):
     places = list(db["places"].find({"user_id": user_id}, {"_id": 0})) 
     return places
 
-def get_places_by_category(category):
-    places = list(db["places"].find({"category": category}, {"_id": 0}))
+def get_places_by_category_and_location_db(category, latitude, longitude):
+    places = list(db["places"].find({
+        "category": category,
+        "location": {
+            "$nearSphere": {
+                "$geometry": {
+                    "type": "Point",
+                    "coordinates": [longitude, latitude]
+                },
+                "$maxDistance": 5000  
+            }
+        }
+    }, {"_id": 0}))
+
     return places
 
 def delete_place(user_id, place_id):

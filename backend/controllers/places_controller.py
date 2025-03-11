@@ -1,4 +1,4 @@
-from backend.database.places_db import save_place, get_saved_places, get_places_by_category, delete_place
+from backend.database.places_db import save_place, get_saved_places, get_places_by_category_and_location_db, delete_place
 from backend.database.auth_db import add_place_to_favorites, get_favorite_places, remove_place_from_favorites
 from backend.database.db_connection import db
 
@@ -22,8 +22,8 @@ class PlacesController:
         return get_saved_places(user_id)
     
     @staticmethod
-    def get_all_places(category: str = None) -> list:
-        return get_places_by_category(category)
+    def get_places_by_category_and_location(category: str, latitude: float, longitude: float) -> list:
+        return get_places_by_category_and_location_db(category, latitude, longitude)
     
     @staticmethod
     def remove_place(user_id: str, place_id: str) -> tuple[bool, str]:
