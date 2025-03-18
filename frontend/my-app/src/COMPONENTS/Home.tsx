@@ -284,7 +284,7 @@ const Home: React.FC = () => {
       <MapContainer
         center={selectedLocation ? [selectedLocation.lat, selectedLocation.lng] : [31.7683, 35.2137]} // ירושלים כברירת מחדל
         zoom={13}
-        style={{ height: "700px", width: "100%" }}>
+        style={{ height: "967px", width: "100%" }}>
       
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="© OpenStreetMap contributors" />
         
