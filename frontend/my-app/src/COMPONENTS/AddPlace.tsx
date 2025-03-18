@@ -134,10 +134,10 @@ const AddPlace: React.FC<AddPlaceProps> = ({ isOpen, onClose }) => {
 
         <label> קטגוריה:</label>
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="מלונות">🏨 מלונות</option>
-          <option value="מסעדות">🍽️ מסעדות</option>
-          <option value="תחנות דלק">⛽ תחנות דלק</option>
-          <option value="עסקים">🏢 עסקים</option>
+          <option value="lodging">🏨 מלונות</option>
+          <option value="restaurant">🍽️ מסעדות</option>
+          <option value="gas_station">⛽ תחנות דלק</option>
+          <option value="store">🏢 עסקים</option>
         </select>
 
         <div>

@@ -46,7 +46,7 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  // שליפת הנתונים כשהמודאל נפתח
+  // שליפת הנתונים כשהמודאל נפתח 
   useEffect(() => {
     if (isOpen) fetchPlaces();
   }, [isOpen]);
