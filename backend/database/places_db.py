@@ -42,23 +42,32 @@ def get_saved_places(user_id):
     places = list(db["places"].find({"user_id": user_id}, {"_id": 0})) 
     return places
 
-def get_places_by_category_and_location_db(category, latitude, longitude):
-    places = db["places"].find(
-        {
-            "category": category,
-            "location": {
-                "$near": {
-                    "$geometry": {
-                        "type": "Point",
-                        "coordinates": [longitude, latitude]
-                    },
-                    "$maxDistance": 5000  
-                }
-            }
-        },
-        {"_id": 0, "name": 1, "address": 1, "latitude": 1, "longitude": 1, "category": 1}  # מחזיר את הקורדינטות!
-    )
-    return list(places)
+from math import radians, cos, sin, sqrt, atan2
+
+def haversine_distance(lat1, lon1, lat2, lon2):
+    R = 6371000  # רדיוס כדור הארץ במטרים
+    lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    return R * c  # מחזיר מרחק במטרים
+
+def get_places_by_category_and_location_db(category, latitude, longitude, max_distance=5000):
+    places = list(db["places"].find({"category": category}))  # חיפוש רק לפי קטגוריה
+    filtered_places = []
+
+    for place in places:
+        place_lat = float(place["latitude"])   
+        place_lon = float(place["longitude"])  
+        distance = haversine_distance(float(latitude), float(longitude), place_lat, place_lon)
+
+        if distance <= max_distance:  # מסנן מקומות בטווח הרצוי
+            place["distance"] = distance
+            filtered_places.append(place)
+
+    return sorted(filtered_places, key=lambda x: x["distance"])  # מיון לפי קרבה
+
 
 def delete_place(user_id, place_id):
     result = db["places"].delete_one({"user_id": user_id, "_id": ObjectId(place_id)})

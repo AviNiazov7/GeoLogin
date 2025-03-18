@@ -49,6 +49,8 @@ def get_places_by_category_and_location():
         category = data.get("category")
         latitude = data.get("latitude")
         longitude = data.get("longitude")
+        print(f"�� Received request: {data}\n")
+        # print("latitude:", latitude + " " + "longitude\n", longitude)
 
         if not category or latitude is None or longitude is None:
             return jsonify({"error": "Category, latitude, and longitude are required"}), 400
@@ -79,7 +81,7 @@ def get_places_by_category_and_location():
     except Exception as e:
         print(f"❌ Error: {str(e)}")
         return jsonify({"error": "Internal server error"}), 500
-    
+
 # 📌 Removes a saved place using place_id
 @places_blueprint.route("/delete", methods=["DELETE"])
 @token_required

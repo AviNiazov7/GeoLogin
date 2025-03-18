@@ -24,7 +24,7 @@ class PlacesController:
     @staticmethod
     def get_places_by_category_and_location(category: str, latitude: float, longitude: float) -> list:
         places = get_places_by_category_and_location_db(category, latitude, longitude)
-
+        print("places in category '{}' near ({}, {})\n".format(category, latitude, longitude))
         if places:
             return [
                 {
