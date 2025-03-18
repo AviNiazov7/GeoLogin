@@ -171,3 +171,4 @@ def rate_place(user_id):
         return jsonify({"message": message}), 200
     else:
         return jsonify({"error": message}), 400
+    

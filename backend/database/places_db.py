@@ -10,8 +10,14 @@ def save_place(data):
     if "place_id" not in data or not data["place_id"]:
         data["place_id"] = str(uuid.uuid4())  
 
+    from datetime import datetime
+
     initial_rating = data.get("score", 0)
     initial_rating_count = 1 if "score" in data else 0
+
+    longitude = data.get("longitude", None)
+    latitude = data.get("latitude", None)
+
     place = {
         "place_id": data["place_id"],
         "user_id": data["user_id"],
@@ -19,16 +25,15 @@ def save_place(data):
         "address": data["address"],
         "details": data.get("details", ""),
         "category": data.get("category", ""),
-        "location": {  
-            "type": "Point",
-            "coordinates": [data.get("longitude", None), data.get("latitude", None)]
-        },
+        "longitude": longitude, 
+        "latitude": latitude,
         "contact_info": data.get("contact_info", ""),
         "opening_hours": data.get("opening_hours", ""),
         "updated_at": datetime.utcnow(),
         "average_rating": initial_rating, 
         "rating_count": initial_rating_count  
     }
+
 
     result = db["places"].insert_one(place)
     return True, str(result.inserted_id)
