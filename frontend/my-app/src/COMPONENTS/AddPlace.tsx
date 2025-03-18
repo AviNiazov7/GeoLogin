@@ -61,10 +61,10 @@ const AddPlace: React.FC<AddPlaceProps> = ({ isOpen, onClose }) => {
       console.log("📌 קואורדינטות שנמצאו:", location);
   
       const placeData = {
-        name: place,
+        name: name2,
         details,
         category,
-        address: name2,
+        address: place,
         latitude: location.lat,  // ✅ מוסיף קואורדינטות
         longitude: location.lng, // ✅ מוסיף קואורדינטות
       };

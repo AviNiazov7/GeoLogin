@@ -65,8 +65,8 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
         {places.map((place) => (
           <div key={place.id} >
            <div className="onedeatail">
-            <div><strong>שם המקום:</strong>{place.address}</div>
-            <p><strong>כתובת:</strong> {place.name}</p>
+            <div><strong>שם המקום:</strong>{place.name}</div>
+            <p><strong>כתובת:</strong> {place.address}</p>
             <p><strong>קטגוריה:</strong> {place.category}</p>
             {place.details && <p><strong>תיאור:</strong> {place.details}</p>}
             <button>הסר</button>

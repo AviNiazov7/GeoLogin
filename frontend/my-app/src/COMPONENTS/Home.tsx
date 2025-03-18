@@ -12,6 +12,7 @@ import SignupDialog from "./SignupDialog";
 import DialogLogin from "./DialogLogin";
 import { useAuth } from "../Contexts/AuthContext";
 import Details from "./Details";
+import axios from "axios";
 
 // טיפוס נתוני מיקום
 interface Location {
@@ -22,6 +23,7 @@ interface Location {
 
 // מקבל API Key מקובץ .env כדי לשמור על אבטחה
 const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+const API_URL = process.env.REACT_APP_API_URL;
 
 const Home: React.FC = () => {
   const { isAuthenticated } = useAuth(); // ✅ בדיקה אם המשתמש מחובר
@@ -133,8 +135,6 @@ const Home: React.FC = () => {
 
 
 
-
-
   const fetchPlaces = async (type: string) => {
     if (!selectedLocation) {
       alert("עליך לבחור מיקום תחילה.");
@@ -144,22 +144,22 @@ const Home: React.FC = () => {
     console.log(`🔎 מחפש ${type} ליד:`, selectedLocation);
   
     const { lat, lng } = selectedLocation;
-    const service = new google.maps.places.PlacesService(new google.maps.Map(document.createElement("div")));
   
-    // יצירת שלוש נקודות חיפוש קרובות
-    const locations = [
-      new google.maps.LatLng(lat, lng),
-      new google.maps.LatLng(lat + 0.01, lng), // טיפה צפונה
-      new google.maps.LatLng(lat, lng + 0.01), // טיפה מזרחה
-    ];
+    if (!google?.maps?.places) {
+      console.error("❌ Google Maps Places API לא נטען כראוי.");
+      return;
+    }
+  
+    const service = new google.maps.places.PlacesService(new google.maps.Map(document.createElement("div")));
   
     let allResults: google.maps.places.PlaceResult[] = [];
   
-    const fetchFromLocation = (location: google.maps.LatLng) => {
+    // **1️⃣ שליפת מקומות מ-Google Places API לפי קטגוריה**
+    const fetchFromGoogle = async () => {
       return new Promise<google.maps.places.PlaceResult[]>((resolve) => {
         const request = {
-          location,
-          radius: 3000, // רדיוס קטן יותר כדי למנוע כפילויות
+          location: new google.maps.LatLng(lat, lng),
+          radius: 5000, // 📌 רדיוס 5 ק"מ
           type,
         };
   
@@ -173,23 +173,51 @@ const Home: React.FC = () => {
       });
     };
   
-    // מבצע את שלושת הקריאות במקביל
-    const resultsArray = await Promise.all(locations.map(fetchFromLocation));
+    allResults = await fetchFromGoogle();
+    console.log(`✅ קיבלנו ${allResults.length} תוצאות מגוגל`);
   
-    // איחוד התוצאות ומניעת כפילויות
-    allResults = resultsArray.flat().filter((place, index, self) =>
+    // **2️⃣ שליפת מקומות מהשרת עם lat, lng, וקטגוריה**
+    const fetchServerPlaces = async () => {
+      const requestData = {
+        category: type,  // שולח את הקטגוריה
+        latitude: lat,   // שולח את ה-lat
+        longitude: lng,  // שולח את ה-lng
+      };
+  
+      console.log("📤 שולח בקשה לשרת עם הנתונים הבאים:", requestData);
+  
+      try {
+        const response = await axios.post(`${API_URL}/places/category`, requestData);
+  
+        console.log("✅ תשובה מהשרת:", response.data);
+  
+        return response.data.places || [];
+      } catch (error) {
+        console.error("❌ שגיאה בשליפת מקומות מהשרת:", error);
+        return [];
+      }
+    };
+  
+    const serverPlaces = await fetchServerPlaces();
+    console.log(`✅ קיבלנו ${serverPlaces.length} תוצאות מהשרת`);
+  
+    // **3️⃣ איחוד התוצאות משני מקורות (Google + שרת)**
+    const allPlaces = [...allResults, ...serverPlaces].filter((place, index, self) =>
       index === self.findIndex((p) => p.place_id === place.place_id)
     );
   
-    console.log(`✅ קיבלנו ${allResults.length} תוצאות`);
+    console.log(`✅ קיבלנו ${allPlaces.length} מקומות (Google + שרת)`);
   
-    if (allResults.length > 0) {
-      const newMarkers = allResults.map((place) => ({
-        lat: place.geometry?.location?.lat() || 0,
-        lng: place.geometry?.location?.lng() || 0,
-        name: place.name || "מקום לא ידוע",
-        type,
-      }));
+    // **4️⃣ הצגת התוצאות על המפה**
+    if (allPlaces.length > 0) {
+      const newMarkers = allPlaces
+        .filter(place => place.geometry?.location || (place.latitude && place.longitude))
+        .map((place) => ({
+          lat: place.geometry?.location?.lat?.() ?? place.latitude ?? 0,
+          lng: place.geometry?.location?.lng?.() ?? place.longitude ?? 0,
+          name: place.name || "מקום לא ידוע",
+          type,
+        }));
   
       console.log("📍 סמנים שנוספו למפה:", newMarkers);
       setMarkers(newMarkers);
@@ -199,11 +227,11 @@ const Home: React.FC = () => {
     }
   };
   
+  const clearMap = () => {
+    setMarkers([]);
+  };
   
-  const clearMap=()=>{
-    setMarkers([])
-
-  }
+  
 
 
 
