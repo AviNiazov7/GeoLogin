@@ -48,7 +48,7 @@ def get_user_saved_places(user_id):
     print(f"📊 Retrieved places: {places}") 
     if places:
         places_with_details = [{"place_id": place["id"],
-                                "place_name": place["name"],
+                                "name": place["name"],
                                 "address": place["address"],
                                 "details": place["details"],
                                 "category": place["category"],
