@@ -27,19 +27,36 @@ def save_new_place(user_id):
         return jsonify({"error": message}), 400
 
 # 📌 Retrieves all saved places for the user, including ratings
+# @places_blueprint.route("/get", methods=["GET"])
+# @token_required
+# def get_user_saved_places(user_id):
+#     print(f"📌 Fetching places for user {user_id}")
+    
+#     places = PlacesController.get_user_saved_places(user_id)
+
+#     if places:
+#         print(f"✅ Retrieved {len(places)} places")
+#         return jsonify({"saved_places": places}), 200
+#     else:
+#         print("⚠️ No places found")
+#         return jsonify({"message": "No places found"}), 200
+
 @places_blueprint.route("/get", methods=["GET"])
 @token_required
 def get_user_saved_places(user_id):
     print(f"📌 Fetching places for user {user_id}")
     
     places = PlacesController.get_user_saved_places(user_id)
-    
+
     if places:
+        places_with_ids = [{"place_id": place["id"], "place_name": place["name"]} for place in places]
+
         print(f"✅ Retrieved {len(places)} places")
-        return jsonify({"saved_places": places}), 200
+        return jsonify({"saved_places": places_with_ids}), 200
     else:
         print("⚠️ No places found")
         return jsonify({"message": "No places found"}), 200
+
 
 # 📌 Retrieves places by category & location (radius 5000 meters) using POST
 @places_blueprint.route("/category", methods=["POST"])
@@ -50,12 +67,10 @@ def get_places_by_category_and_location():
         latitude = data.get("latitude")
         longitude = data.get("longitude")
         print(f"�� Received request: {data}\n")
-        # print("latitude:", latitude + " " + "longitude\n", longitude)
 
         if not category or latitude is None or longitude is None:
             return jsonify({"error": "Category, latitude, and longitude are required"}), 400
 
-        # Ensure latitude & longitude are floats
         try:
             latitude = float(latitude)
             longitude = float(longitude)
@@ -85,15 +100,15 @@ def get_places_by_category_and_location():
 # 📌 Removes a saved place using place_id
 @places_blueprint.route("/delete", methods=["DELETE"])
 @token_required
-def remove_place(user_id):
+def remove_place(place_id):
     data = request.json
-    print(f"📌 Received delete request from user {user_id}: {data}")
+    print(f"📌 Received delete request from user {place_id}: {data}")
 
     if not data or "place_id" not in data:
         print("❌ Error: Missing place id")
         return jsonify({"error": "Invalid input: Missing place id"}), 400
 
-    success, message = PlacesController.remove_place(user_id, data["place_id"])
+    success, message = PlacesController.remove_place(place_id, data["place_id"])
     if success:
         print(f"✅ Place deleted: {message}")
         return jsonify({"message": message}), 200

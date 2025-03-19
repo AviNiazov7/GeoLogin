@@ -45,16 +45,16 @@ def get_saved_places(user_id):
 from math import radians, cos, sin, sqrt, atan2
 
 def haversine_distance(lat1, lon1, lat2, lon2):
-    R = 6371000  # רדיוס כדור הארץ במטרים
+    R = 6371000  
     lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
     dlat = lat2 - lat1
     dlon = lon2 - lon1
     a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
-    return R * c  # מחזיר מרחק במטרים
+    return R * c   
 
 def get_places_by_category_and_location_db(category, latitude, longitude, max_distance=5000):
-    places = list(db["places"].find({"category": category}))  # חיפוש רק לפי קטגוריה
+    places = list(db["places"].find({"category": category}))  
     filtered_places = []
 
     for place in places:
@@ -62,11 +62,11 @@ def get_places_by_category_and_location_db(category, latitude, longitude, max_di
         place_lon = float(place["longitude"])  
         distance = haversine_distance(float(latitude), float(longitude), place_lat, place_lon)
 
-        if distance <= max_distance:  # מסנן מקומות בטווח הרצוי
+        if distance <= max_distance:  
             place["distance"] = distance
             filtered_places.append(place)
 
-    return sorted(filtered_places, key=lambda x: x["distance"])  # מיון לפי קרבה
+    return sorted(filtered_places, key=lambda x: x["distance"])
 
 
 def delete_place(user_id, place_id):
