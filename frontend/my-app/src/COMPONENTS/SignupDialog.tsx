@@ -80,7 +80,7 @@ const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
     <div className="modal-overlay">
       <div className="modal-content">
 
-        <h2 className="title3">הרשמה</h2>
+        {/* <h2 className="title">הרשמה</h2> */}
         
        
 

@@ -154,7 +154,7 @@ const Home: React.FC = () => {
   
     let allResults: google.maps.places.PlaceResult[] = [];
   
-    // **1️⃣ שליפת מקומות מ-Google Places API לפי קטגוריה**
+    // ** שליפת מקומות מ-Google Places API לפי קטגוריה**
     const fetchFromGoogle = async () => {
       return new Promise<google.maps.places.PlaceResult[]>((resolve) => {
         const request = {
@@ -176,7 +176,7 @@ const Home: React.FC = () => {
     allResults = await fetchFromGoogle();
     console.log(`✅ קיבלנו ${allResults.length} תוצאות מגוגל`);
   
-    // **2️⃣ שליפת מקומות מהשרת עם lat, lng, וקטגוריה**
+    // ** שליפת מקומות מהשרת עם lat, lng, וקטגוריה**
     const fetchServerPlaces = async () => {
       const requestData = {
         category: type,  // שולח את הקטגוריה
@@ -201,29 +201,37 @@ const Home: React.FC = () => {
     const serverPlaces = await fetchServerPlaces();
     console.log(`✅ קיבלנו ${serverPlaces.length} תוצאות מהשרת`);
   
-    // **3️⃣ איחוד התוצאות משני מקורות (Google + שרת)**
+    // ** איחוד התוצאות משני מקורות (Google + שרת)**
     const allPlaces = [...allResults, ...serverPlaces].filter((place, index, self) =>
-      index === self.findIndex((p) => p.place_id === place.place_id)
+      index === self.findIndex((p) =>
+        p.place_id ? p.place_id === place.place_id : p.name === place.name
+      )
     );
+    
   
     console.log(`✅ קיבלנו ${allPlaces.length} מקומות (Google + שרת)`);
   
-    // **4️⃣ הצגת התוצאות על המפה**
+    // **הצגת התוצאות על המפה**
     if (allPlaces.length > 0) {
       const newMarkers = allPlaces
-        .filter(place => place.geometry?.location || (place.latitude && place.longitude))
-        .map((place) => ({
-          lat: place.geometry?.location?.lat?.() ?? place.latitude ?? 0,
-          lng: place.geometry?.location?.lng?.() ?? place.longitude ?? 0,
-          name: place.name || "מקום לא ידוע",
-          type,
-        }));
-  
-      console.log("📍 סמנים שנוספו למפה:", newMarkers);
-      setMarkers(newMarkers);
-    } else {
-      alert(`⚠️ לא נמצאו ${type} באזור זה.`);
-      setMarkers([]);
+      .map((place, index) => ({
+        lat: place.geometry?.location?.lat?.() ?? place.latitude ?? 0,
+        lng: place.geometry?.location?.lng?.() ?? place.longitude ?? 0,
+        name: place.name || "מקום לא ידוע",
+        type,
+        latOffset: (index * 0.0001) || 0,  // הוספת זווית אקראית קטנה לכל מקום
+        lngOffset: (index * 0.0001) || 0   // כדי למנוע הצגה על אותו המקום
+      }))
+      .map((place) => ({
+        lat: place.lat + place.latOffset,  // הוספת ההזזה
+        lng: place.lng + place.lngOffset,  // הוספת ההזזה
+        name: place.name,
+        type: place.type
+      }));
+    
+    console.log("📍 סמנים שנוספו למפה:", newMarkers);
+    setMarkers(newMarkers);
+    
     }
   };
   

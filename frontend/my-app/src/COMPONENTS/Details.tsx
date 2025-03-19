@@ -46,6 +46,34 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
     }
   };
 
+  const deletePlace = async (id: number) => {
+    try {
+      console.log("📌 מקום למחיקה: ", id); // הדפסת ה-ID של המקום לפני שליחה
+  
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("❌ אין טוקן! המשתמש לא מחובר.");
+  
+      const response = await axios.delete(`${API_URL}/places/delete`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // הגדרת סוג תוכן JSON
+        },
+        data: {
+          place_id: id, // שליחת ה-ID שהתקבל מהשרת למחיקה
+        },
+      });
+  
+      console.log("📌 מקום נמחק בהצלחה:", response.data);
+      setPlaces((prevPlaces) => prevPlaces.filter((place) => place.id !== id));
+    } catch (err) {
+      setError("שגיאה במחיקת המקום");
+      console.error("❌ שגיאה במחיקת מקום:", err);
+    }
+  };
+  
+  
+  
+
   // שליפת הנתונים כשהמודאל נפתח 
   useEffect(() => {
     if (isOpen) fetchPlaces();
@@ -53,9 +81,8 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
 
   return (
     <Modal isOpen={isOpen} onRequestClose={onClose} className="modal2" overlayClassName="overlay2">
-      <div >
-        <h2 >רשימת מקומות</h2>
-       
+      <div>
+        <h2>רשימת מקומות</h2>
       </div>
 
       {loading && <p>טוען נתונים...</p>}
@@ -63,21 +90,20 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
 
       <div>
         {places.map((place) => (
-          <div key={place.id} >
-           <div className="onedeatail">
-            <div><strong>שם המקום:</strong>{place.name}</div>
-            <p><strong>כתובת:</strong> {place.address}</p>
-            <p><strong>קטגוריה:</strong> {place.category}</p>
-            {place.details && <p><strong>תיאור:</strong> {place.details}</p>}
-            <button>הסר</button>
-           </div>
-            
+          <div key={place.id}>
+            <div className="onedeatail">
+              <div><strong>שם המקום:</strong>{place.name}</div>
+              <p><strong>כתובת:</strong> {place.address}</p>
+              <p> {place.category}<strong>:קטגוריה</strong></p>
+              {place.details && <p><strong>תיאור:</strong> {place.details}</p>}
+              <button onClick={() => deletePlace(place.id)}>הסר</button>
+            </div>
           </div>
         ))}
       </div>
-        <button onClick={fetchPlaces} disabled={loading}>רענן</button>
-        <button onClick={onClose}>סגור</button>
-
+      
+      <button onClick={fetchPlaces} disabled={loading}>רענן</button>
+      <button onClick={onClose}>סגור</button>
     </Modal>
   );
 };

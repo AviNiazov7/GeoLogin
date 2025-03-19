@@ -21,7 +21,7 @@ const AddPlace: React.FC<AddPlaceProps> = ({ isOpen, onClose }) => {
   const [place, setPlace] = useState<string>("");
   const [details, setDetails] = useState<string>("");
   const [name2, setName] = useState<string>("");
-  const [category, setCategory] = useState<string>("מלונות");
+  const [category, setCategory] = useState<string>("lodging");
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -82,7 +82,7 @@ const AddPlace: React.FC<AddPlaceProps> = ({ isOpen, onClose }) => {
       setPlace("");
       setDetails("");
       setName("");
-      setCategory("מלונות");
+      setCategory("");
       onClose();
     } catch (error) {
       console.error("🚨 שגיאה בשליחת הנתונים:", error);

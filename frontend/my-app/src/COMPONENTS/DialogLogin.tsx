@@ -30,7 +30,7 @@ const DialogLogin: React.FC<DialogLoginProps> = ({ isOpen, onClose }) => {
         localStorage.setItem("token", token); // שמירת ה-Token ב-LocalStorage
         login(token); // עדכון המצב הגלובלי דרך `AuthContext`
         console.log("Login successful:", response.data);
-        alert("!ברוך הבא")
+        // alert("!ברוך הבא")
         onClose(); // סגירת הדיאלוג
       } else {
         setError("Login failed: No token received.");
@@ -48,7 +48,7 @@ const DialogLogin: React.FC<DialogLoginProps> = ({ isOpen, onClose }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <span className="close" onClick={onClose}>&times;</span>
+        {/* <span className="close" onClick={onClose}>&times;</span> */}
 
         <h2 className="titel">Login</h2>
 
