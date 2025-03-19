@@ -39,11 +39,18 @@ def save_place(data):
     return True, str(result.inserted_id)
 
 def get_saved_places(user_id):
-    places = list(db["places"].find({"user_id": user_id}, {"_id": 0})) 
+    places = list(db["places"].find({"user_id": user_id}))
+    
+    for place in places:
+        # להוסיף את ה-ID של המיקום (לא של המשתמש)
+        place["id"] = str(place["_id"])  # המרת ה-ID של MongoDB למחרוזת
+        del place["_id"]  # מסיר את ה-ID המקורי של MongoDB כדי לא לשלוח אותו
+        
     return places
 
-from math import radians, cos, sin, sqrt, atan2
 
+
+from math import radians, cos, sin, sqrt, atan2
 def haversine_distance(lat1, lon1, lat2, lon2):
     R = 6371000  
     lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
