@@ -42,10 +42,8 @@ def get_saved_places(user_id):
     places = list(db["places"].find({"user_id": user_id}))
     
     for place in places:
-        # להוסיף את ה-ID של המיקום (לא של המשתמש)
-        place["id"] = str(place["_id"])  # המרת ה-ID של MongoDB למחרוזת
-        del place["_id"]  # מסיר את ה-ID המקורי של MongoDB כדי לא לשלוח אותו
-        
+        place["id"] = str(place["_id"])
+        del place["_id"] 
     return places
 
 

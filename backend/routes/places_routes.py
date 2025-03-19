@@ -43,19 +43,27 @@ def save_new_place(user_id):
 
 @places_blueprint.route("/get", methods=["GET"])
 @token_required
-def get_user_saved_places(user_id):
-    print(f"📌 Fetching places for user {user_id}")
-    
+def get_user_saved_places(user_id): 
     places = PlacesController.get_user_saved_places(user_id)
     print(f"📊 Retrieved places: {places}") 
-
     if places:
-        places_with_ids = [{"place_id": place["id"], "place_name": place["name"]} for place in places]
+        places_with_details = [{"place_id": place["id"],
+                                "place_name": place["name"],
+                                "address": place["address"],
+                                "details": place["details"],
+                                "category": place["category"],
+                                "contact_info": place["contact_info"],
+                                "opening_hours": place["opening_hours"],
+                                "average_rating": place["average_rating"],
+                                "rating_count": place["rating_count"],
+                                "latitude": place["latitude"],
+                                "longitude": place["longitude"]} for place in places]
         print(f"✅ Retrieved {len(places)} places")
-        return jsonify({"saved_places": places_with_ids}), 200
+        return jsonify({"saved_places": places_with_details}), 200
     else:
         print("⚠️ No places found")
         return jsonify({"message": "No places found"}), 200
+
 
 #  Retrieves places by category & location (radius 5000 meters) using POST
 @places_blueprint.route("/category", methods=["POST"])
