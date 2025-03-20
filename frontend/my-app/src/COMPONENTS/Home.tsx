@@ -36,6 +36,8 @@ const Home: React.FC = () => {
   const [markers, setMarkers] = useState<Array<{ lat: number; lng: number; name: string }>>([]);
   const [openDetails,setDetails]=useState(false);
 
+
+  const { logout } = useAuth(); 
   // אייקון מותאם אישית למפה
   const customIcon = new L.Icon({
     iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
@@ -92,39 +94,46 @@ const Home: React.FC = () => {
     control: (provided: any) => ({
       ...provided,
       borderRadius: "8px",
-      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-      padding: "5px",
-      fontSize: "16px",
-      backgroundColor: "white",
-      "&:hover": { borderColor: "#388E3C" },
+      boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.15)", // גוון עדין יותר של צל
+      padding: "8px 12px", // מרווחים טובים יותר
+      fontSize: "14px", // גודל פונט קטן יותר
+      backgroundColor: "#f9f9f9", // צבע רקע בהיר יותר
+      border: "1px solid #ddd", // גבול בהיר יותר
+      "&:hover": {
+        borderColor: "#4CAF50", // צבע גבול יותר מודגש בעת ריחוף
+      },
     }),
     menu: (provided: any) => ({
       ...provided,
       borderRadius: "8px",
-      overflow: "hidden", 
-      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-      backgroundColor: "white",
+      overflow: "hidden",
+      boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.15)", // צל עבה יותר
+      backgroundColor: "#fff",
     }),
     option: (provided: any, state: any) => ({
       ...provided,
-      backgroundColor: state.isFocused ? "#4CAF50" : "#fff",
-      color: state.isFocused ? "white" : "black",
-      padding: "10px",
+      backgroundColor: state.isFocused ? "#4CAF50" : "#fff", // צבע רקע ירוק בריחוף
+      color: state.isFocused ? "white" : "#333", // צבע טקסט יותר בהיר כאשר מרחפים
+      padding: "10px 12px", // ריווח טוב יותר בין אופציות
       cursor: "pointer",
-      transition: "background-color 0.2s ease-in-out",
+      transition: "background-color 0.2s ease, color 0.2s ease", // תוספת של שינוי צבע בשפתי טקסט
+      fontSize: "14px", // גודל פונט קטן יותר
+      "&:active": {
+        backgroundColor: "#388E3C", // צבע רקע פעיל
+      },
     }),
     singleValue: (provided: any) => ({
       ...provided,
-      color: "#333",
-      fontWeight: "bold",
+      color: "#333", // צבע טקסט כהה
+      fontWeight: "500", // משקל פונט בינוני
     }),
     placeholder: (provided: any) => ({
       ...provided,
-      color: "#999",
+      color: "#bbb", // צבע כהה פחות עבור placeholder
       fontStyle: "italic",
+      fontSize: "14px", // גודל פונט קטן יותר
     }),
   };
-
 
   
 
@@ -136,6 +145,14 @@ const Home: React.FC = () => {
 
 
   const fetchPlaces = async (type: string) => {
+
+
+    const token = localStorage.getItem("token");
+  
+    if (!token) {
+      alert("⚠️ אין הרשאה, יש להתחבר תחילה.");
+      return;
+    }
     if (!selectedLocation) {
       alert("עליך לבחור מיקום תחילה.");
       return;
@@ -269,6 +286,7 @@ const Home: React.FC = () => {
           
         <button onClick={() => setDetails(true)}>פרטים</button>
         <Details isOpen={openDetails} onClose={() => setDetails(false)} />
+        <button className="logout-button" onClick={logout}> התנתק</button>
 
 
 
@@ -320,7 +338,7 @@ const Home: React.FC = () => {
       <MapContainer
         center={selectedLocation ? [selectedLocation.lat, selectedLocation.lng] : [31.7683, 35.2137]} // ירושלים כברירת מחדל
         zoom={13}
-        style={{ height: "967px", width: "100%" }}>
+        style={{ height: "961px", width: "100%" }}>
       
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="© OpenStreetMap contributors" />
         

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./Signup.css";
 import { useAuth } from "../Contexts/AuthContext";
+import "./Dialoglogin.css"
+import Modal from "react-modal";
+
 
 interface DialogLoginProps {
   isOpen: boolean;
@@ -30,8 +32,8 @@ const DialogLogin: React.FC<DialogLoginProps> = ({ isOpen, onClose }) => {
         localStorage.setItem("token", token); // שמירת ה-Token ב-LocalStorage
         login(token); // עדכון המצב הגלובלי דרך `AuthContext`
         console.log("Login successful:", response.data);
-        // alert("!ברוך הבא")
-        onClose(); // סגירת הדיאלוג
+      
+        onClose();
       } else {
         setError("Login failed: No token received.");
       }
@@ -46,36 +48,38 @@ const DialogLogin: React.FC<DialogLoginProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null; // אם הדיאלוג לא פתוח, אל תציג אותו
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        {/* <span className="close" onClick={onClose}>&times;</span> */}
+     <Modal isOpen={isOpen} onRequestClose={onClose} className="modal2" overlayClassName="overlay2">
+        <h1 className="titel">Login</h1>
 
-        <h2 className="titel">Login</h2>
-
-        <label>User name</label>
+        <h3>User name</h3>
+         
         <input
           type="text"
           placeholder="Enter user name"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
+        <h3>Password</h3>
 
-        <label>Password:</label>
-        <input
+       
+ <input
           type="password"
           placeholder="Enter password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+      
+       
 
         {error && <p className="error-message">{error}</p>}
-
-        <button className="closebutoon" onClick={handleLogin} disabled={loading}>
+<div className="closebutoon">
+    <button className="closebutoon1" onClick={handleLogin} disabled={loading}>
           {loading ? "Logging in..." : "Login"}
         </button>
-        <button onClick={onClose}>Close</button>
-      </div>
-    </div>
+        <button className="closebutoon1" onClick={onClose}>Close</button>
+</div>
+      
+     </Modal>
   );
 };
 

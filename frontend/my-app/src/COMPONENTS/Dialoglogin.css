@@ -1,0 +1,70 @@
+.overlay2 {
+    background: rgba(0, 0, 0, 0.6); /* רקע כהה חצי שקוף */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* לוודא שהדיאלוג מעל כל התוכן */
+    overflow: hidden;
+  }
+  
+  .modal2{
+    background: white;
+    width: 450px; /* רוחב קבוע */
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-in-out;
+    max-height: 400px; /* ניתן לשנות את הגובה בהתאם לצורך */
+    overflow-y: auto; /* מוסיף גלילה אנכית */
+    overflow-x: hidden; /* מונע גלילה אופקית */
+    border: 1px solid #ccc; /* מסגרת אופציונלית */
+  }
+  .titel {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  /* input:focus {
+    outline: none;
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  } */
+  h3 {
+    font-size: 16px;
+    color: #555;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+  }
+ .closebutoon{
+  
+  margin-top: 10px;
+ 
+ }
+ .closebutoon1{
+    color: #555;
+    margin-top: 10px;
+
+ }

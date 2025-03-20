@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./Signup.css";
 import DialogLogin from "./DialogLogin";
+import Modal from "react-modal";
 import { useAuth } from "../Contexts/AuthContext"; // ✅ ייבוא `AuthContext`
 
 interface SignupDialogProps {
@@ -10,7 +11,7 @@ interface SignupDialogProps {
 }
 
 const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
-  const { login,logout } = useAuth(); 
+  const { login } = useAuth(); 
   const API_URL = process.env.REACT_APP_API_URL;
 
   const [username, setUsername] = useState("");
@@ -46,8 +47,8 @@ const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
         password,
       });
 
-      console.log("📌 User signed up successfully:", response.data);
-      alert("✅ נרשמת בהצלחה!");
+      console.log(" User signed up successfully:", response.data);
+      alert(" נרשמת בהצלחה!");
 
       const token = response.data.token; // ✅ מקבל את ה-token מהשרת
       if (token) {
@@ -58,11 +59,11 @@ const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
       }
 
     } catch (err: any) {
-      console.error("❌ Signup error:", err);
+      console.error(" Signup error:", err);
       if (axios.isAxiosError(err) && err.response) {
-        setError(err.response.data.message || "❌ שגיאה בהרשמה.");
+        setError(err.response.data.message || " שגיאה בהרשמה.");
       } else {
-        setError("❌ שגיאת חיבור, נסה שוב מאוחר יותר.");
+        setError(" שגיאת חיבור, נסה שוב מאוחר יותר.");
       }
     } finally {
       setLoading(false);
@@ -77,31 +78,38 @@ const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
   if (moveLogin) return <DialogLogin isOpen={moveLogin} onClose={() => setMoveLogin(false)} />; // ✅ מציג דיאלוג התחברות אם ההרשמה הצליחה ללא טוקן
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+  
+      
+ <Modal isOpen={isOpen} onRequestClose={onClose} className="modal2" overlayClassName="overlay2">
+        <div>
 
-        {/* <h2 className="title">הרשמה</h2> */}
-        
+       <h3>אימייל</h3>
+
        
+ <input type="email" placeholder="הכנס אימייל" value={email} onChange={(e) => setEmail(e.target.value)} />
 
-        <label>אימייל:</label>
-        <input type="email" placeholder="הכנס אימייל" value={email} onChange={(e) => setEmail(e.target.value)} />
-
-        <label>שם משתמש:</label>
+       <h3>שם משתמש</h3>
         <input type="text" placeholder="הכנס שם משתמש" value={username} onChange={(e) => setUsername(e.target.value)} />
-
-        <label>סיסמה:</label>
+<h3>סיסמה</h3>
         <input type="password" placeholder="הכנס סיסמה" value={password} onChange={(e) => setPassword(e.target.value)} />
 
+       </div>
+       
         {error && <p className="error-message">{error}</p>}
-
-        <button className="submit-button" onClick={handleSignup} disabled={loading}>
-          {loading ? "⏳ נרשם..." : "🚀 הירשם"}
+<div className="submitbutton">
+  
+        <button className="closebutoon1" onClick={handleSignup} disabled={loading}>
+          {loading ? " נרשם..." : " הירשם"}
         </button>
-        <button className="cancel-button" onClick={onClose}>❌ ביטול</button>
-        <button className="logout-button" onClick={logout}>🚪 התנתק</button>
-        </div>
-    </div>
+        <button className="closebutoon1" onClick={onClose}> ביטול</button>
+</div>
+      
+        
+        </Modal>
+         
+    
+
+   
   );
 };
 

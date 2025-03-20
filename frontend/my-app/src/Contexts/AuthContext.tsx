@@ -6,7 +6,6 @@ interface AuthContextType {
   isLoading: boolean;
   login: (token: string) => void;
   logout: () => void;
-  deleteUser: ()=> void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -22,31 +21,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const token = localStorage.getItem("token");
       console.log("📌 Token from localStorage:", token);
   
+      // מתחילים את מצב הטעינה
+      setLoading(true);
+  
       if (!token) {
         console.log("❌ No token found, setting isAuthenticated = false");
-        setAuthenticated(false);
+        setAuthenticated(false);  // אם אין טוקן, המשתמש לא מחובר
         setLoading(false);
         return;
       }
   
       try {
+        // שליחת בקשה לאימות הטוקן
         await axios.post(`${process.env.REACT_APP_API_URL}/auth/validate-token`, {}, {
           headers: { Authorization: `Bearer ${token}` },
         });
   
         console.log("✅ Token is valid, setting isAuthenticated = true");
-        setAuthenticated(true);
+        setAuthenticated(true);  // אם הטוקן חוקי, המשתמש מחובר
       } catch (error) {
         console.error("❌ Token validation failed:", error);
-        localStorage.removeItem("token");
-        setAuthenticated(false);
+        localStorage.removeItem("token");  // אם האימות נכשל, נמחוק את הטוקן
+        setAuthenticated(false);  // המשתמש לא מחובר
       }
   
-      setLoading(false);
+      setLoading(false);  // מסיימים את מצב הטעינה
     };
   
-    checkAuth();
+    checkAuth();  // קריאה לפונקציה שבודקת את האימות
   }, []);
+  
   
 
   const login = (token: string) => {
@@ -54,58 +58,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setAuthenticated(true);
     console.log("🔹 User logged in, token saved.");
   };
-  const logout = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
-      await axios.post(`${process.env.REACT_APP_API_URL}/auth/logout`, {}, { 
-        headers: { Authorization: `Bearer ${token}` } 
-      });
-
-      alert("🚪 התנתקת בהצלחה!");
-    } catch (error) {
-      console.error("❌ שגיאה בהתנתקות:", error);
-    } finally {
-      localStorage.removeItem("token");
-      setAuthenticated(false);
-    }
+  const logout = () => {
+    localStorage.removeItem("token"); // הסרת הטוקן
+    setAuthenticated(false); // עדכון מצב התחברות
+    console.log("🔹 User logged out.");
+    alert("התנתקת בהצלחה")
   };
-
-  const deleteUser = async () => {
-    try {
-      const confirmed = window.confirm("❗ האם אתה בטוח שברצונך למחוק את החשבון?");
-      if (!confirmed) return;
-
-      const token = localStorage.getItem("token");
-      if (!token) {
-        alert("⚠️ אין משתמש מחובר.");
-        return;
-      }
-
-      // 🗑️ שליחת בקשת מחיקת המשתמש לשרת עם `DELETE`
-      await axios.delete(`${process.env.REACT_APP_API_URL}/auth/delete`, { 
-        headers: { Authorization: `Bearer ${token}` } 
-      });
-
-      alert("🗑️ החשבון נמחק בהצלחה!");
-      
-      // 🚪 התנתקות לאחר מחיקה
-      logout();
-    } catch (error) {
-      console.error("❌ שגיאה במחיקת המשתמש:", error);
-      alert("❌ שגיאה במחיקת החשבון.");
-    }
-  };
-
-
 
   if (isLoading) {
     return <div>🔄 טוען נתוני משתמש...</div>;
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading, login,logout,deleteUser}}>
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, login,logout}}>
       {children}
     </AuthContext.Provider>
   );

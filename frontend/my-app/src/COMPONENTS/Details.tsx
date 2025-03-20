@@ -27,20 +27,20 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
     setLoading(true);
     setError(null);
     try {
-      if (!API_URL) throw new Error("❌ API_URL לא מוגדר!");
+      if (!API_URL) throw new Error(" API_URL לא מוגדר!");
 
       const token = localStorage.getItem("token");
-      if (!token) throw new Error("❌ אין טוקן! המשתמש לא מחובר.");
+      if (!token) throw new Error(" אין טוקן! המשתמש לא מחובר.");
 
       const response = await axios.get(`${API_URL}/places/get`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      console.log("📌 מקומות מהשרת:", response.data);
+      console.log(" מקומות מהשרת:", response.data);
       setPlaces(response.data.saved_places || []);
     } catch (err) {
       setError("אנא התחבר תחילה");
-      console.error("❌ שגיאה:", err);
+      console.error(" שגיאה:", err);
     } finally {
       setLoading(false);
     }
@@ -48,10 +48,10 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
   
   const deletePlace = async (place_id: string) => {  // השתמש ב-place_id
     try {
-      console.log("📌 מקום למחיקה: ", place_id);  // הדפסת ה-place_id של המקום למחיקה
+      console.log(" מקום למחיקה: ", place_id);  // הדפסת ה-place_id של המקום למחיקה
   
       const token = localStorage.getItem("token");
-      if (!token) throw new Error("❌ אין טוקן! המשתמש לא מחובר.");
+      if (!token) throw new Error(" אין טוקן! המשתמש לא מחובר.");
   
       const response = await axios.delete(`${API_URL}/places/delete`, {
         headers: {
@@ -63,11 +63,11 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
         },
       });
   
-      console.log("📌 מקום נמחק בהצלחה:", response.data);
+      console.log(" מקום נמחק בהצלחה:", response.data);
       setPlaces((prevPlaces) => prevPlaces.filter((place) => place.place_id !== place_id));  // עדכון ה-state
     } catch (err) {
       setError("שגיאה במחיקת המקום");
-      console.error("❌ שגיאה במחיקת מקום:", err);
+      console.error(" שגיאה במחיקת מקום:", err);
     }
   };
   
