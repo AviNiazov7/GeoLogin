@@ -4,7 +4,7 @@ import "./Details.css";
 import Modal from "react-modal";
 
 interface Place {
-  id: number;
+  place_id: string;
   name: string;
   address: string;
   details?: string;
@@ -45,10 +45,10 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
       setLoading(false);
     }
   };
-
-  const deletePlace = async (id: number) => {
+  
+  const deletePlace = async (place_id: string) => {  // השתמש ב-place_id
     try {
-      console.log("📌 מקום למחיקה: ", id); // הדפסת ה-ID של המקום לפני שליחה
+      console.log("📌 מקום למחיקה: ", place_id);  // הדפסת ה-place_id של המקום למחיקה
   
       const token = localStorage.getItem("token");
       if (!token) throw new Error("❌ אין טוקן! המשתמש לא מחובר.");
@@ -56,15 +56,15 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
       const response = await axios.delete(`${API_URL}/places/delete`, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json", // הגדרת סוג תוכן JSON
+          "Content-Type": "application/json",
         },
         data: {
-          place_id: id, // שליחת ה-ID שהתקבל מהשרת למחיקה
+          place_id: place_id,  // שליחה של ה-place_id למחיקה
         },
       });
   
       console.log("📌 מקום נמחק בהצלחה:", response.data);
-      setPlaces((prevPlaces) => prevPlaces.filter((place) => place.id !== id));
+      setPlaces((prevPlaces) => prevPlaces.filter((place) => place.place_id !== place_id));  // עדכון ה-state
     } catch (err) {
       setError("שגיאה במחיקת המקום");
       console.error("❌ שגיאה במחיקת מקום:", err);
@@ -89,18 +89,19 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
       {error && <p className="text-red-500">{error}</p>}
 
       <div>
-        {places.map((place) => (
-          <div key={place.id}>
-            <div className="onedeatail">
-              <div><strong>שם המקום:</strong>{place.name}</div>
-              <p><strong>כתובת:</strong> {place.address}</p>
-              <p> {place.category}<strong>:קטגוריה</strong></p>
-              {place.details && <p><strong>תיאור:</strong> {place.details}</p>}
-              <button onClick={() => deletePlace(place.id)}>הסר</button>
-            </div>
-          </div>
-        ))}
+  {places.map((place) => (
+    <div key={place.place_id}>  {/* השתמש ב-place_id כמפתח ייחודי */}
+      <div className="onedeatail">
+        <div><strong>שם המקום:</strong>{place.name}</div>
+        <p><strong>כתובת:</strong> {place.address}</p>
+        <p>{place.category}<strong>:קטגוריה</strong></p>
+        {place.details && <p><strong>תיאור:</strong> {place.details}</p>}
+        <button onClick={() => deletePlace(place.place_id)}>הסר</button>  {/* שלח את ה-place_id למחיקה */}
       </div>
+    </div>
+  ))}
+</div>
+
       
       <button onClick={fetchPlaces} disabled={loading}>רענן</button>
       <button onClick={onClose}>סגור</button>
