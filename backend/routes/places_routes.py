@@ -26,21 +26,6 @@ def save_new_place(user_id):
         print(f"❌ Error while saving place: {message}")
         return jsonify({"error": message}), 400
 
-#📌 Retrieves all saved places for the user, including ratings
-# @places_blueprint.route("/get", methods=["GET"])
-# @token_required
-# def get_user_saved_places(user_id):
-#     print(f"📌 Fetching places for user {user_id}")
-    
-#     places = PlacesController.get_user_saved_places(user_id)
-
-#     if places:
-#         print(f"✅ Retrieved {len(places)} places")
-#         return jsonify({"saved_places": places}), 200
-#     else:
-#         print("⚠️ No places found")
-#         return jsonify({"message": "No places found"}), 200
-
 @places_blueprint.route("/get", methods=["GET"])
 @token_required
 def get_user_saved_places(user_id): 
