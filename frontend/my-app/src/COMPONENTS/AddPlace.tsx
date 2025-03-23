@@ -142,7 +142,7 @@ const AddPlace: React.FC<AddPlaceProps> = ({ isOpen, onClose }) => {
 
         <div>
           <button type="submit">הוספה</button>
-          <button onClick={onClose} className="cancel"> ביטול</button>
+          {/* <button onClick={onClose} className="cancel"> ביטול</button> */}
         </div>
       </form>
     </Modal>

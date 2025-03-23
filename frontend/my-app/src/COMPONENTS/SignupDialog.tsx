@@ -3,7 +3,7 @@ import axios from "axios";
 import "./Signup.css";
 import DialogLogin from "./DialogLogin";
 import Modal from "react-modal";
-import { useAuth } from "../Contexts/AuthContext"; // ✅ ייבוא `AuthContext`
+import { useAuth } from "../Contexts/AuthContext";
 
 interface SignupDialogProps {
   isOpen: boolean;
@@ -11,7 +11,7 @@ interface SignupDialogProps {
 }
 
 const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
-  const { login } = useAuth(); 
+  const { login } = useAuth();
   const API_URL = process.env.REACT_APP_API_URL;
 
   const [username, setUsername] = useState("");
@@ -24,7 +24,6 @@ const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
   const handleSignup = async () => {
     setError(null);
 
-    // ✅ בדיקות תקינות לטופס לפני שליחה
     if (!username.trim() || !email.trim() || !password.trim()) {
       setError("⚠️ יש למלא את כל השדות.");
       return;
@@ -47,69 +46,111 @@ const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
         password,
       });
 
-      console.log(" User signed up successfully:", response.data);
-      alert(" נרשמת בהצלחה!");
+      console.log("User signed up successfully:", response.data);
+      alert("נרשמת בהצלחה!");
 
-      const token = response.data.token; // ✅ מקבל את ה-token מהשרת
+      const token = response.data.token;
       if (token) {
-        login(token); // ✅ מחבר את המשתמש ע"י `AuthContext`
-        onClose(); // ✅ סוגר את דיאלוג ההרשמה לאחר הצלחה
+        login(token);
+        onClose(); // סגירת הדיאלוג
       } else {
-        setMoveLogin(true); // ✅ אם אין טוקן, עובר לדיאלוג התחברות
+        setMoveLogin(true);
       }
-
     } catch (err: any) {
-      console.error(" Signup error:", err);
+      console.error("Signup error:", err);
       if (axios.isAxiosError(err) && err.response) {
-        setError(err.response.data.message || " שגיאה בהרשמה.");
+        setError(err.response.data.message || "שגיאה בהרשמה.");
       } else {
-        setError(" שגיאת חיבור, נסה שוב מאוחר יותר.");
+        setError("שגיאת חיבור, נסה שוב מאוחר יותר.");
       }
     } finally {
       setLoading(false);
     }
   };
 
- 
+  const deleteUserByEmail = async (email: string): Promise<void> => {
+    try {
+      const response = await axios.delete(`${API_URL}/auth/delete`, {
+        data: { email },
+      });
 
-
+      console.log("User deleted successfully:", response.data);
+      alert("המשתמש נמחק בהצלחה.");
+      onClose();
+    } catch (error: any) {
+      console.error("שגיאה במחיקת משתמש", error);
+      if (axios.isAxiosError(error) && error.response) {
+        alert(error.response.data.message || "הכנס אימייל לצורך צחיקת החשבון");
+      } else {
+        alert("שגיאת חיבור, נסה שוב מאוחר יותר.");
+      }
+    }
+  };
 
   if (!isOpen) return null;
-  if (moveLogin) return <DialogLogin isOpen={moveLogin} onClose={() => setMoveLogin(false)} />; // ✅ מציג דיאלוג התחברות אם ההרשמה הצליחה ללא טוקן
+  if (moveLogin)
+    return <DialogLogin isOpen={moveLogin} onClose={() => setMoveLogin(false)} />;
 
   return (
-  
-      
- <Modal isOpen={isOpen} onRequestClose={onClose} className="modal2" overlayClassName="overlay2">
-        <div>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      className="modal2"
+      overlayClassName="overlay2"
+    >
+      <button className="close-btn" onClick={onClose}>
+        ✖
+      </button>
 
-       <h3>אימייל</h3>
+      <div>
+        <h3>Email</h3>
+        <input
+          type="email"
+          placeholder="הכנס אימייל"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-       
- <input type="email" placeholder="הכנס אימייל" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <h3>User name</h3>
+        <input
+          type="text"
+          placeholder="הכנס שם משתמש"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
 
-       <h3>שם משתמש</h3>
-        <input type="text" placeholder="הכנס שם משתמש" value={username} onChange={(e) => setUsername(e.target.value)} />
-<h3>סיסמה</h3>
-        <input type="password" placeholder="הכנס סיסמה" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <h3>Password</h3>
+        <input
+          type="password"
+          placeholder="הכנס סיסמה"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </div>
 
-       </div>
-       
-        {error && <p className="error-message">{error}</p>}
-<div className="submitbutton">
-  
-        <button className="closebutoon1" onClick={handleSignup} disabled={loading}>
-          {loading ? " נרשם..." : " הירשם"}
+      {error && <p className="error-message">{error}</p>}
+
+      <div className="submitbutton">
+        <button
+          className="closebutoon1"
+          onClick={handleSignup}
+          disabled={loading}
+        >
+          {loading ? "נרשם..." : "הירשם"}
         </button>
-        <button className="closebutoon1" onClick={onClose}> ביטול</button>
-</div>
-      
-        
-        </Modal>
-         
-    
 
-   
+        <button
+          className="closebutoon1"
+          onClick={() => {
+            if (window.confirm("האם אתה בטוח שברצונך למחוק את החשבון?")) {
+              deleteUserByEmail(email);
+            }
+          }}
+        >
+          מחק חשבון
+        </button>
+      </div>
+    </Modal>
   );
 };
 

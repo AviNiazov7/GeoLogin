@@ -49,6 +49,8 @@ const DialogLogin: React.FC<DialogLoginProps> = ({ isOpen, onClose }) => {
 
   return (
      <Modal isOpen={isOpen} onRequestClose={onClose} className="modal2" overlayClassName="overlay2">
+            <button className="close-btn" onClick={onClose}>✖</button>
+
         <h1 className="titel">Login</h1>
 
         <h3>User name</h3>
@@ -76,7 +78,6 @@ const DialogLogin: React.FC<DialogLoginProps> = ({ isOpen, onClose }) => {
     <button className="closebutoon1" onClick={handleLogin} disabled={loading}>
           {loading ? "Logging in..." : "Login"}
         </button>
-        <button className="closebutoon1" onClick={onClose}>Close</button>
 </div>
       
      </Modal>

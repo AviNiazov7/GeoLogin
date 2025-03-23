@@ -49,7 +49,7 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
   const deletePlace = async (place_id: string) => {  // השתמש ב-place_id
     try {
       console.log(" מקום למחיקה: ", place_id);  // הדפסת ה-place_id של המקום למחיקה
-  
+  alert("בטוח שברצונך למחוק מקום זה?")
       const token = localStorage.getItem("token");
       if (!token) throw new Error(" אין טוקן! המשתמש לא מחובר.");
   
@@ -62,6 +62,7 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
           place_id: place_id,  // שליחה של ה-place_id למחיקה
         },
       });
+      
   
       console.log(" מקום נמחק בהצלחה:", response.data);
       setPlaces((prevPlaces) => prevPlaces.filter((place) => place.place_id !== place_id));  // עדכון ה-state
@@ -83,6 +84,8 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
     <Modal isOpen={isOpen} onRequestClose={onClose} className="modal2" overlayClassName="overlay2">
       <div>
         <h2>רשימת מקומות</h2>
+        <button className="close-btn" onClick={onClose}>✖</button>
+
       </div>
 
       {loading && <p>טוען נתונים...</p>}
@@ -104,7 +107,6 @@ const Details: React.FC<DetailsProps> = ({ isOpen, onClose }) => {
 
       
       <button onClick={fetchPlaces} disabled={loading}>רענן</button>
-      <button onClick={onClose}>סגור</button>
     </Modal>
   );
 };

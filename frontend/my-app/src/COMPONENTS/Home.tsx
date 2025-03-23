@@ -84,7 +84,7 @@ const Home: React.FC = () => {
     }
   };
 
-
+ 
 
   // שינוי ערך שדה החיפוש
   const handleInputChange = (newValue: string) => setInputValue(newValue);
@@ -284,9 +284,9 @@ const Home: React.FC = () => {
         <DialogLogin isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} />
 
           
-        <button onClick={() => setDetails(true)}>פרטים</button>
+        <button onClick={() => setDetails(true)}>DETAILS</button>
         <Details isOpen={openDetails} onClose={() => setDetails(false)} />
-        <button className="logout-button" onClick={logout}> התנתק</button>
+        <button className="logout-button" onClick={logout}> LOGOUT</button>
 
 
 
@@ -328,7 +328,7 @@ const Home: React.FC = () => {
         <button className="Buton" onClick={handleOpenAddPlace}data-tooltip-id="addplace">+</button>
         <AddPlace isOpen={isAddPlaceOpen} onClose={handleCloseAddPlace} />
 
-   <button onClick={clearMap}>נקה תוצאות</button>
+   <button onClick={clearMap}>CLEAN </button>
 
 </div>
        
