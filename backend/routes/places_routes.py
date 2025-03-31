@@ -21,7 +21,7 @@ def save_new_place(user_id):
 
     if success:
         print(f"✅ Success: {message}")
-        return jsonify({"message": message}), 201
+        return jsonify({"message": message}), 201 
     else:
         print(f"❌ Error while saving place: {message}")
         return jsonify({"error": message}), 400
@@ -34,7 +34,7 @@ def get_user_saved_places(user_id):
     if places:
         places_with_details = [{"place_id": place["id"],
                                 "name": place["name"],
-                                "address": place["address"],
+                                "address": place["address"], 
                                 "details": place["details"],
                                 "category": place["category"],
                                 "contact_info": place["contact_info"],
@@ -49,7 +49,6 @@ def get_user_saved_places(user_id):
         print("⚠️ No places found")
         return jsonify({"message": "No places found"}), 200
 
-
 #  Retrieves places by category & location (radius 5000 meters) using POST
 @places_blueprint.route("/category", methods=["POST"])
 def get_places_by_category_and_location():
@@ -58,7 +57,7 @@ def get_places_by_category_and_location():
         category = data.get("category")
         latitude = data.get("latitude")
         longitude = data.get("longitude")
-        print(f"�� Received request: {data}\n")
+        print(f"Received request: {data}\n")
 
         if not category or latitude is None or longitude is None:
             return jsonify({"error": "Category, latitude, and longitude are required"}), 400

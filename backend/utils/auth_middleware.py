@@ -4,7 +4,7 @@ from functools import wraps
 from backend.database.db_connection import db
 from bson.objectid import ObjectId
 
-def token_required(f):
+def token_required(f): 
     @wraps(f)
     def decorated(*args, **kwargs):
         token = request.headers.get("Authorization")

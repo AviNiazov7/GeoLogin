@@ -74,6 +74,7 @@ def get_places_by_category_and_location_db(category, latitude, longitude, max_di
     return sorted(filtered_places, key=lambda x: x["distance"])
 
 
+
 def delete_place(user_id, place_id):
     result = db["places"].delete_one({"user_id": user_id, "_id": ObjectId(place_id)})
     return (True, "Place deleted successfully") if result.deleted_count > 0 else (False, "Place not found")
@@ -95,3 +96,4 @@ def rate_place(place_id, score):
         {"$set": {"average_rating": new_average_rating, "rating_count": new_rating_count}}
     )
     return True, "Rating updated successfully"
+
