@@ -11,7 +11,7 @@ interface SignupDialogProps {
 }
 
 const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
-  const { login } = useAuth();
+  const { login,logout } = useAuth();
   const API_URL = process.env.REACT_APP_API_URL;
 
   const [username, setUsername] = useState("");
@@ -55,6 +55,7 @@ const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
         onClose(); // סגירת הדיאלוג
       } else {
         setMoveLogin(true);
+        // onClose();
       }
     } catch (err: any) {
       console.error("Signup error:", err);
@@ -73,7 +74,7 @@ const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
       const response = await axios.delete(`${API_URL}/auth/delete`, {
         data: { email },
       });
-
+      logout()
       console.log("User deleted successfully:", response.data);
       alert("המשתמש נמחק בהצלחה.");
       onClose();
@@ -87,9 +88,12 @@ const SignupDialog: React.FC<SignupDialogProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  if (!isOpen) return null;
-  if (moveLogin)
+  if (!isOpen || moveLogin) return null;
+
+  if (moveLogin) {
     return <DialogLogin isOpen={moveLogin} onClose={() => setMoveLogin(false)} />;
+  }
+  
 
   return (
     <Modal

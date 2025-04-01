@@ -18,7 +18,7 @@ import axios from "axios";
 interface Location {
   lat: number;
   lng: number;
-  label: string;
+  inputValue: string;
 }
 
 // מקבל API Key מקובץ .env כדי לשמור על אבטחה
@@ -35,9 +35,14 @@ const Home: React.FC = () => {
   const [isLoginOpen, setLoginOpen] = useState(false);
   const [markers, setMarkers] = useState<Array<{ lat: number; lng: number; name: string }>>([]);
   const [openDetails,setDetails]=useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
 
-  const { logout } = useAuth(); 
+
+
+
+
+ 
   // אייקון מותאם אישית למפה
   const customIcon = new L.Icon({
     iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
@@ -56,10 +61,12 @@ const Home: React.FC = () => {
   const handleOpenAddPlace = () => setAddPlaceOpen(true);
   const handleCloseAddPlace = () => setAddPlaceOpen(false);
 
-  // בחירת מיקום מתוך ה-Autocomplete - חיפוש מותר רק אם המשתמש מחובר
+ 
+
   const handleLocationSelect = async (value: any) => {
     if (!isAuthenticated) {
-      alert("!עליך להתחבר כדי לחפש במפה.");
+      alert("עליך להתחבר כדי לחפש במפה");
+      setInputValue("");
       console.log(isAuthenticated)
       return;
     }
@@ -75,9 +82,12 @@ const Home: React.FC = () => {
         setSelectedLocation({
           lat: results[0].geometry.location.lat(),
           lng: results[0].geometry.location.lng(),
-          label: value.label,
+          inputValue: value.label,
         });
-        setInputValue(value.label);
+        
+        setInputValue(inputValue);
+        setIsOpen(false)
+        clearMap()
       }
     } catch (error) {
       console.error("Error fetching location details:", error);
@@ -87,7 +97,17 @@ const Home: React.FC = () => {
  
 
   // שינוי ערך שדה החיפוש
-  const handleInputChange = (newValue: string) => setInputValue(newValue);
+  const handleInputChange = (value: string, { action }: { action: string }) => {
+    if (action === "input-change") {
+      setInputValue(value);
+    }
+  };
+
+
+
+
+
+
 
   // עיצוב מותאם אישית ל-Autocomplete
   const customStyles = {
@@ -142,19 +162,22 @@ const Home: React.FC = () => {
 
 
 
-
-
+//פונקציה לשליפת מקומות מגוגל והשרת (פונקציה אסינכרונית)
   const fetchPlaces = async (type: string) => {
-
-
     const token = localStorage.getItem("token");
-  
+
+
+
+
+  //בדיקת הרשאה ומיקום נבחר
     if (!token) {
       alert("⚠️ אין הרשאה, יש להתחבר תחילה.");
+     
       return;
     }
     if (!selectedLocation) {
       alert("עליך לבחור מיקום תחילה.");
+       setIsOpen(false)
       return;
     }
   
@@ -167,6 +190,8 @@ const Home: React.FC = () => {
       return;
     }
   
+
+//הגדרות שירות גוגל(places)
     const service = new google.maps.places.PlacesService(new google.maps.Map(document.createElement("div")));
   
     let allResults: google.maps.places.PlaceResult[] = [];
@@ -178,6 +203,8 @@ const Home: React.FC = () => {
           location: new google.maps.LatLng(lat, lng),
           radius: 5000, // 📌 רדיוס 5 ק"מ
           type,
+        
+          
         };
   
         service.nearbySearch(request, (results, status) => {
@@ -252,8 +279,18 @@ const Home: React.FC = () => {
     }
   };
   
+
+
+
+
+
+
+
+
+
   const clearMap = () => {
     setMarkers([]);
+    setIsOpen(false)
   };
   
   
@@ -264,17 +301,58 @@ const Home: React.FC = () => {
   
   
   // פונקציות ייעודיות לכל סוג מקום
-  const fetchRestaurants = () => fetchPlaces("restaurant");
-  const fetchGasStations = () => fetchPlaces("gas_station");
-  const fetchStores = () => fetchPlaces("store");
-  const fetchBusinesses = () => fetchPlaces("lodging");
+  const fetchRestaurants = () => {
+    if (!selectedLocation) {
+      alert("עליך לבחור מיקום תחילה.");
+       setIsOpen(false)
+      return;
+    }
+    fetchPlaces("restaurant");
+    setIsOpen(true)
+ 
+  };
   
+  const fetchGasStations = () => {
+    if (!selectedLocation) {
+      alert("עליך לבחור מיקום תחילה.");
+       setIsOpen(false)
+      return;
+    }
+    fetchPlaces("gas_station");
+    setIsOpen(true)
+  };
+  
+  const fetchStores = () => {
+    if (!selectedLocation) {
+      alert("עליך לבחור מיקום תחילה.");
+       setIsOpen(false)
+      return;
+    }
+    fetchPlaces("store");
+    setIsOpen(true)
+  };
+  
+  const fetchBusinesses = () => {
+    if (!selectedLocation) {
+      alert("עליך לבחור מיקום תחילה.");
+       setIsOpen(false)
+      return;
+    }
+    fetchPlaces("lodging");
+    setIsOpen(true)
+  };
+
+
 
 
 
   return (
-    <div>
+    <div >
+
+
       <nav className="navbar">
+
+
 
        
         <button onClick={() => setSignupOpen(true)}>SIGN UP</button>
@@ -286,7 +364,6 @@ const Home: React.FC = () => {
           
         <button onClick={() => setDetails(true)}>DETAILS</button>
         <Details isOpen={openDetails} onClose={() => setDetails(false)} />
-        <button className="logout-button" onClick={logout}> LOGOUT</button>
 
 
 
@@ -302,6 +379,8 @@ const Home: React.FC = () => {
             }}
           />
         </div>
+
+
         <div className="Buton">
   <Tooltip id="hotel-tooltip" place="bottom" content="מלונות במיקומך" />
   <button onClick={fetchBusinesses} data-tooltip-id="hotel-tooltip">
@@ -334,8 +413,10 @@ const Home: React.FC = () => {
        
       </nav>
 
-      {/* מפת Leaflet */}
-      <MapContainer
+
+
+<nav className="navbarmap">
+  <MapContainer 
         center={selectedLocation ? [selectedLocation.lat, selectedLocation.lng] : [31.7683, 35.2137]} // ירושלים כברירת מחדל
         zoom={13}
         style={{ height: "961px", width: "100%" }}>
@@ -347,20 +428,54 @@ const Home: React.FC = () => {
             <ChangeMapView center={[selectedLocation.lat, selectedLocation.lng]} />
 
             <Marker position={[selectedLocation.lat, selectedLocation.lng]} icon={customIcon}>
-              <Popup>{selectedLocation.label}</Popup>
+              <Popup>{selectedLocation.inputValue}</Popup>
             </Marker>
           </>
         )}
 
 
 {markers.map((marker, index) => (
-  <Marker key={index} position={[marker.lat, marker.lng]} icon={customIcon}>
+  <ul>
+   <Marker key={index} position={[marker.lat, marker.lng]} icon={customIcon}>
     <Popup>{marker.name}</Popup>
-  </Marker>
+  </Marker> 
+  </ul>
+  
 ))}
 
+ 
+ 
       </MapContainer>
+</nav>
+
+      
+ 
+<div  className={`sidebar ${isOpen ? "open" : ""}`}>
+  
+ <button className="close-btn" onClick={() => setIsOpen(false)}>✖</button>
+ 
+
+        <ul style={{direction:"rtl" }}>
+          {markers.map((place, index) => (
+            <li key={index}  style={{ margin: "5px 0", padding: "5px",  cursor: "pointer" }} >
+              <button onClick={() => {
+                  console.log(`Navigating to ${place.name}`);
+                }}
+              >
+                {place.name}
+              </button>
+            </li>
+          ))}
+        </ul>
+</div>
+
+
+  
+   
     </div>
+
+
+
   );
 };
 

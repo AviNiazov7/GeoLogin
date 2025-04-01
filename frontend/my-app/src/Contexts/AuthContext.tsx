@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -30,19 +30,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setLoading(false);
         return;
       }
-  
+   setAuthenticated(true);  
       try {
-        // שליחת בקשה לאימות הטוקן
-        await axios.post(`${process.env.REACT_APP_API_URL}/auth/validate-token`, {}, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-  
-        console.log("✅ Token is valid, setting isAuthenticated = true");
-        setAuthenticated(true);  // אם הטוקן חוקי, המשתמש מחובר
+      
       } catch (error) {
         console.error("❌ Token validation failed:", error);
-        localStorage.removeItem("token");  // אם האימות נכשל, נמחוק את הטוקן
-        setAuthenticated(false);  // המשתמש לא מחובר
+       
       }
   
       setLoading(false);  // מסיימים את מצב הטעינה
@@ -58,6 +51,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setAuthenticated(true);
     console.log("🔹 User logged in, token saved.");
   };
+
+  
   const logout = () => {
     localStorage.removeItem("token"); // הסרת הטוקן
     setAuthenticated(false); // עדכון מצב התחברות

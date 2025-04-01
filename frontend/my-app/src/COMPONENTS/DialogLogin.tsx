@@ -11,7 +11,7 @@ interface DialogLoginProps {
 }
 
 const DialogLogin: React.FC<DialogLoginProps> = ({ isOpen, onClose }) => {
-  const { login } = useAuth(); // קבלת פונקציית התחברות מ-AuthContext
+  const { login,logout } = useAuth(); // קבלת פונקציית התחברות מ-AuthContext
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -44,6 +44,10 @@ const DialogLogin: React.FC<DialogLoginProps> = ({ isOpen, onClose }) => {
       setLoading(false);
     }
   };
+  const logou=()=>{
+logout()
+onClose()
+  }
 
   if (!isOpen) return null; // אם הדיאלוג לא פתוח, אל תציג אותו
 
@@ -78,6 +82,7 @@ const DialogLogin: React.FC<DialogLoginProps> = ({ isOpen, onClose }) => {
     <button className="closebutoon1" onClick={handleLogin} disabled={loading}>
           {loading ? "Logging in..." : "Login"}
         </button>
+        <button className="closebutoon1" onClick={logou}> Logout</button>
 </div>
       
      </Modal>

@@ -5,7 +5,6 @@
   justify-content: space-between;
   align-items: center;
   color: white;
-
 }
 
 .navbar button {
@@ -24,21 +23,57 @@
   text-decoration: underline;
 }
 .autocomplete-container{
-  z-index: 9999; 
-}
-/* צבע טקסט וגבול של כל אפשרות */
-.custom-autocomplete .css-d7l1ni-option {
-  color: #333;
-  padding: 10px;
- 
+  z-index: 1000; 
 }
 
-/* צבע הרקע כאשר מרחפים מעל אפשרות */
-.custom-autocomplete .css-d7l1ni-option:hover {
-  background-color: #0073e6;
-  color: #ffffff;
-}
+
 
 .Buton{
   z-index: 1000;
 } 
+
+
+
+/* רשימת המקום לא פעיל עדיין בבדיקה*/
+
+.container {
+  display: flex;
+  height: 100vh; /* גובה מלא */
+  transition: all 0.3s ease-in-out; /* אפקט חלק בזמן הצגת הרשימה */
+}
+
+
+
+
+
+
+/* Sidebar שמחליק מהצד הימני */
+.sidebar {
+  position: fixed;
+  top: 120px;
+  right: -400px;
+  width: 330px;
+  height: 100%;
+  background-color: white;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  z-index: 1000;
+  transition: right 0.3s ease-in-out;
+  overflow-y: auto;
+  height: 940px;
+  border-radius: 8px;
+}
+
+.sidebar.open {
+  right: 0;
+}
+
+/* כפתור סגירה בתוך הסיידבר */
+.sidebar .close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  float: left;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
